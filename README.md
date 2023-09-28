@@ -15,6 +15,13 @@
   <a href="https://www.typescriptlang.org/" alt="TypeScript" target="_blank">
     <img src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white" />
   </a>
+    <a href="https://www.prisma.io/" alt="Prisma" target="_blank">
+    <img src="https://img.shields.io/badge/Prisma-3982CE.svg?style=for-the-badge&logo=Prisma&logoColor=white" />
+  </a>
+  </a>
+    <a href="https://www.postgresql.org/" alt="PostgreSQL" target="_blank">
+    <img src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white" />
+  </a>
 </p>
 
 <h1 align="center">NESTJS BOILERPLATE</h1>
@@ -34,7 +41,7 @@
       - Typescript support interface and type so that every developer can easily understand and debug
 
 - It will includes:
-  - [ ] Setup Prisma Database Connection
+  - [x] Setup Prisma Database Connection
   - [ ] Setup Swagger
   - [ ] Setup Centralize Handling Error
   - [ ] Setup Middleware Utilize
@@ -49,6 +56,25 @@
 
 - Install [NodeJS v20](https://nodejs.org/en)
 - Install [Bun v1](https://bun.sh/)
+
+### Step 2: Start server
+
+- Run `docker-compose up -d --build` to spin up services or tools we using
 - Run `bun install` to install all package dependencies
-- Run `bun run start:dev` to run dev
-- Run `bun run start:pro` to run production
+- Run `bun run prisma:generate` to generate a data access layer (DAL) to query database
+  - If the first-time or renew database `bun run prisma:migrate-dev` to migrate all database
+- Run `bun run start:dev` to development new feature
+- Run `bun run start:pro` to start server on cloud
+
+## Database Config
+
+- We using [PostgreSQL](https://www.postgresql.org/docs/16/index.html) v16 and [Prisma](https://www.prisma.io/docs/concepts) v5 to communication with database
+- After try using Knex, TypeORM, Prisma...
+  - I think Prisma is the most ORM for developer can easily design, management, migration...
+  - It working like Github which allow you record a history of changes via .sql migration files, so that you can checking the difference of each version or rollback easier
+  - You can read more in here to [comparison between Prisma and Other ORMs](https://www.prisma.io/docs/concepts/more/comparisons)
+
+
+## Reference
+
+- [Prisma PostgreSQL approach](https://www.prisma.io/blog/nestjs-prisma-rest-api-7D056s1BmOL0) to make you familiar with Prisma
