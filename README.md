@@ -24,6 +24,10 @@
   </a>
 </p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+</p>
+
 <h1 align="center">NESTJS BOILERPLATE</h1>
 
 ## Preface
@@ -42,9 +46,10 @@
 
 - It will includes:
   - [x] Setup Prisma Database Connection
-  - [ ] Setup Swagger
+  - [x] Setup Fastify with Swagger OpenApi3
   - [ ] Setup Centralize Handling Error
   - [ ] Setup Middleware Utilize
+  - [ ] Setup Logger & Plugin
   - [ ] Setup Cache using Redis or Local LRU
   - [ ] Setup Auth Jsonwebtoken
   - [ ] Setup Docker
@@ -55,16 +60,42 @@
 ### Step 1: Installation
 
 - Install [NodeJS v20](https://nodejs.org/en)
+
+```bash
+### Install NVM which manage node version
+brew install nvm
+### Install Node v20
+nvm install v20
+```
+
 - Install [Bun v1](https://bun.sh/)
+
+```bash
+brew tap oven-sh/bun
+brew install bun
+```
 
 ### Step 2: Start server
 
-- Run `docker-compose up -d --build` to spin up services or tools we using
-- Run `bun install` to install all package dependencies
-- Run `bun run prisma:generate` to generate a data access layer (DAL) to query database
-  - If the first-time or renew database `bun run prisma:migrate-dev` to migrate all database
-- Run `bun run start:dev` to development new feature
-- Run `bun run start:pro` to start server on cloud
+```bash
+# spin up third-party like database, metric, cache... which server is dependent
+docker-compose up -d --build
+
+# install all package dependencies
+bun install
+
+# generate a data access layer (DAL) to communication with database
+bun run prisma:generate
+
+# (optional) if first-time or renew database run this command
+bun run prisma:migrate-dev
+
+# start to development new feature and debug
+bun run start:dev
+
+# start to hosting server on cloud
+bun run start:pro
+```
 
 ## Database Config
 
@@ -73,7 +104,6 @@
   - I think Prisma is the most ORM for developer can easily design, management, migration...
   - It working like Github which allow you record a history of changes via .sql migration files, so that you can checking the difference of each version or rollback easier
   - You can read more in here to [comparison between Prisma and Other ORMs](https://www.prisma.io/docs/concepts/more/comparisons)
-
 
 ## Reference
 
