@@ -8,9 +8,17 @@ export interface IConfigApp {
   whitelist: string[]
 }
 
+export interface IConfigCookie {
+  path: string
+  domain: string
+  secret: string
+  secure: boolean
+  httpOnly: boolean
+}
 export interface IConfig {
   env: Env
   app: IConfigApp
+  cookie: IConfigCookie
 }
 
 export type IReq = FastifyRequest

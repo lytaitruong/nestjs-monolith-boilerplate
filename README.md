@@ -50,8 +50,8 @@
 - [x] Setup Framework ([Fastify](https://fastify.dev/))
 - [x] Setup Document API ([Swagger](https://swagger.io/))
 - [x] Setup Centralize Handling Error
-- [ ] Setup Middleware Utilize
-- [ ] Setup Logger & Plugin
+- [x] Setup Middleware Utilize
+- [x] Setup Logger & Plugin
 - [ ] Setup Auth JWT
 - [ ] Setup Cache using Redis or Local LRU
 - [ ] Setup Docker

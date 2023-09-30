@@ -1,37 +1,57 @@
-import { Logger } from '@nestjs/common'
+import compression from '@fastify/compress'
+import cookie from '@fastify/cookie'
+import csrf from '@fastify/csrf-protection'
+import helmet from '@fastify/helmet'
+import upload from '@fastify/multipart'
+import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
+import { Logger } from 'nestjs-pino'
 import { AppModule } from './app.module'
-import { Env, setupSwagger } from './common'
-import { HttpExceptionFilter } from './common/middleware'
+import { CORS, Env, IConfigApp, IConfigCookie, IReq, setupSwagger } from './common'
+import { genReqId, helmetSetting, uploadSetting } from './common/common.config'
+import { HttpExceptionFilter, HttpInterceptor } from './common/middleware'
 
 async function bootstrap() {
-  const adapter = new FastifyAdapter()
-  adapter.getInstance().addHook('onRoute', (opts) => {
-    if (opts.path === '/api/v1/healthcheck' || opts.path.startsWith('/api/v1/docs')) opts.logLevel = 'error'
+  const adapter = new FastifyAdapter({ logger: false, genReqId })
+  adapter.getInstance().addHook('preHandler', (req, res, next) => {
+    if (req.body) logger.log({ body: req.body })
+    next()
   })
 
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule, adapter)
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, adapter, { bufferLogs: true, rawBody: true })
 
   const config = app.get(ConfigService)
-  const logger = new Logger('Main')
-
-  // GLOBAL MIDDLEWARE
-  app.useGlobalFilters(new HttpExceptionFilter())
-
+  const logger = app.get(Logger)
   // CONFIG
-  const { port, version, service } = config.get('app')
+  const { port, version, service } = config.get<IConfigApp>('app')
+  const { path, secret, secure, httpOnly } = config.get<IConfigCookie>('cookie')
   app.setGlobalPrefix(`api/${version}`)
-
+  // PLUGIN
+  app.register(helmet, helmetSetting)
+  app.register(upload, uploadSetting)
+  app.register(cookie, { secret, parseOptions: { sameSite: 'strict', path, secure, httpOnly } })
+  app.register(compression, { encodings: ['gzip', 'deflate'] })
+  app.register(csrf, {
+    sessionPlugin: '@fastify/cookie',
+    csrfOpts: { hmacKey: secret },
+    cookieOpts: { sameSite: 'strict', httpOnly, secure, signed: true },
+    getToken: (req: IReq) => req.headers['xsrf-token'] as string | void,
+  })
+  // GLOBAL MIDDLEWARE
+  app.useLogger(logger)
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }))
+  app.useGlobalFilters(new HttpExceptionFilter())
+  app.useGlobalInterceptors(new HttpInterceptor())
   // SWAGGER
   if (config.get('env') !== Env.PRODUCTION) {
     setupSwagger(app, version, service)
   }
-
+  // CORS
+  app.enableCors(CORS)
   // EXIT
   app.enableShutdownHooks()
-
   // START
   await app.listen(port, '0.0.0.0')
   logger.log(`🚀 Application is running on: http://localhost:${port}/api/${version}`)

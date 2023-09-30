@@ -15,7 +15,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       exception instanceof AppException
         ? exception.getResponse()
         : this.formatError(exception['response']['message'], exception.message)
-    this.logger.error(`exception: ${JSON.stringify(error)}`, exception.stack)
+    this.logger.error({ error }, exception.stack)
     return res.code(exception.getStatus() || HttpStatus.INTERNAL_SERVER_ERROR).send(error)
   }
 
