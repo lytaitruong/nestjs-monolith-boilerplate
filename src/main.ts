@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import { AppModule } from './app.module'
 import { Env, setupSwagger } from './common'
+import { HttpExceptionFilter } from './common/middleware'
 
 async function bootstrap() {
   const adapter = new FastifyAdapter()
@@ -15,6 +16,9 @@ async function bootstrap() {
 
   const config = app.get(ConfigService)
   const logger = new Logger('Main')
+
+  // GLOBAL MIDDLEWARE
+  app.useGlobalFilters(new HttpExceptionFilter())
 
   // CONFIG
   const { port, version, service } = config.get('app')

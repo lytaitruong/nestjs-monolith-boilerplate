@@ -44,16 +44,20 @@
       - It require every developer need to know Typescript to contribution
       - Typescript support interface and type so that every developer can easily understand and debug
 
-- It will includes:
-  - [x] Setup Prisma Database Connection
-  - [x] Setup Fastify with Swagger OpenApi3
-  - [ ] Setup Centralize Handling Error
-  - [ ] Setup Middleware Utilize
-  - [ ] Setup Logger & Plugin
-  - [ ] Setup Cache using Redis or Local LRU
-  - [ ] Setup Auth Jsonwebtoken
-  - [ ] Setup Docker
-  - [ ] Setup Queue using Bull
+## Features
+
+- [x] Setup Database ([Prisma v5](https://www.prisma.io/))
+- [x] Setup Framework ([Fastify](https://fastify.dev/))
+- [x] Setup Document API ([Swagger](https://swagger.io/))
+- [x] Setup Centralize Handling Error
+- [ ] Setup Middleware Utilize
+- [ ] Setup Logger & Plugin
+- [ ] Setup Auth JWT
+- [ ] Setup Cache using Redis or Local LRU
+- [ ] Setup Docker
+- [ ] Setup Queue using Bull
+- [ ] Setup Upload file ([Aws S3](https://aws.amazon.com/s3/))
+- [ ] Setup Webhook ([Stripe](https://stripe.com/))
 
 ## How to use
 
