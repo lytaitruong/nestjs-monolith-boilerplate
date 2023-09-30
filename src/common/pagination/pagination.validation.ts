@@ -1,9 +1,8 @@
-import { PAGINATION } from '@/common'
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
 import { IsBoolean, IsOptional, IsString, ValidateIf } from 'class-validator'
 import { ApiPaginateLimit, IsLargeThan, IsSorted } from './pagination.decorator'
-import { IPaginationParams, Sort } from './pagination.interface'
+import { IPaginationParams, PAGINATION, Sort } from './pagination.interface'
 
 export class PaginationOptionsDto {
   @ApiPaginateLimit({ default: PAGINATION.DEFAULT_PAGE }, PAGINATION.MAXIMUM_PAGE)

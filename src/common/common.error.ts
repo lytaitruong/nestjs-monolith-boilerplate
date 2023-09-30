@@ -15,6 +15,7 @@ export interface IError {
 }
 
 export interface IAppError {
+  name: string
   code: string
   status: HttpStatus
   message: string
