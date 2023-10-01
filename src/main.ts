@@ -25,7 +25,7 @@ async function bootstrap() {
   const config = app.get(ConfigService)
   const logger = app.get(Logger)
   // CONFIG
-  const { port, version, service } = config.get<IConfigApp>('app')
+  const { port, version, service, whitelist } = config.get<IConfigApp>('app')
   const { path, secret, secure, httpOnly } = config.get<IConfigCookie>('cookie')
   app.setGlobalPrefix(`api/${version}`)
   // PLUGIN
@@ -49,7 +49,7 @@ async function bootstrap() {
     setupSwagger(app, version, service)
   }
   // CORS
-  app.enableCors(CORS)
+  app.enableCors(CORS(whitelist))
   // EXIT
   app.enableShutdownHooks()
   // START

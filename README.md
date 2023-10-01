@@ -39,7 +39,7 @@
     - `Architecture`
       - With project I have joined (not I build from scratch), using Express or Hapi framework have the codebase with folder structure, coding style is difference. So a new developer take a lot of time to approach and understand structure folder to be contributor
       - So that NestJS provide a standard template for every developer using NodeJS can quickly approach to contributor
-      - In the behind it still using Express or Fastify (I prefer using Fastify because for the performance)
+      - In the behind it still using Express or Fastify (I prefer using Fastify because for the [performance](https://github.com/lytaitruong/nestjs-benchmark))
     - `Typescript`
       - It require every developer need to know Typescript to contribution
       - Typescript support interface and type so that every developer can easily understand and debug

@@ -8,7 +8,7 @@ export const configuration = (): IConfig => ({
     port: process.env.APP_PORT ? +process.env.APP_PORT : 3000,
     version: process.env.APP_VERSION || 'v1',
     service: process.env.APP_SERVICE || 'NestJS Boilerplate',
-    whitelist: typeof process.env.APP_WHITELIST === 'string' ? process.env.APP_WHITELIST.split(',') : [],
+    whitelist: typeof process.env.APP_WHITELIST === 'string' ? process.env.APP_WHITELIST.split(',') : '*',
   },
   cookie: {
     path: process.env.COOKIE_PATH || '/',

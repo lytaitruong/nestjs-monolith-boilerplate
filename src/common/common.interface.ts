@@ -6,7 +6,7 @@ export interface IConfigApp {
   port: number
   version: string
   service: string
-  whitelist: string[]
+  whitelist: string[] | '*'
 }
 
 export interface IConfigCookie {
