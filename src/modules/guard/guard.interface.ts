@@ -2,6 +2,7 @@ import { CUID, IReq } from '@/common'
 import { JwtPayload } from 'jsonwebtoken'
 
 export enum GuardType {
+  ROLE = 'role',
   ACCESS = 'access-jwt',
 }
 
@@ -22,6 +23,7 @@ export interface IConfigGuard {
 
 export type JwtInfo = Omit<JwtPayload, 'sub'> & {
   sub: CUID
+  role: string
 }
 
 export type IReqJwt = IReq & { user: JwtInfo }
