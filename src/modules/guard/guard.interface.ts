@@ -4,10 +4,12 @@ import { JwtPayload } from 'jsonwebtoken'
 export enum GuardType {
   ROLE = 'role',
   ACCESS = 'access-jwt',
+  REFRESH = 'refresh-jwt',
 }
 
 export enum GuardCookie {
   ACCESS_TOKEN = 'access_token',
+  REFRESH_TOKEN = 'refresh_token',
 }
 
 export interface IConfigJwt {
@@ -15,6 +17,10 @@ export interface IConfigJwt {
   accessPublic: string
   accessExpire: string
   accessMaxAge: number
+  refreshSecret: string
+  refreshPublic: string
+  refreshExpire: string
+  refreshMaxAge: number
 }
 
 export interface IConfigGuard {

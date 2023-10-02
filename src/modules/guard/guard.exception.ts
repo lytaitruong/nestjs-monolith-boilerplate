@@ -7,6 +7,10 @@ export type GuardCode =
   | 'ACCESS_TOKEN_EXPIRED'
   | 'ACCESS_TOKEN_INVALID'
   | 'ACCESS_TOKEN_CLAIMS_BEFORE'
+  | 'REFRESH_TOKEN_REQUIRE'
+  | 'REFRESH_TOKEN_EXPIRED'
+  | 'REFRESH_TOKEN_INVALID'
+  | 'REFRESH_TOKEN_CLAIMS_BEFORE'
 
 export const GUARD_ERROR: Record<GuardCode, IAppError> = {
   FORBIDDEN_RESOURCE: {
@@ -37,6 +41,30 @@ export const GUARD_ERROR: Record<GuardCode, IAppError> = {
     name: `Access Token Has Claims`,
     code: `1004`,
     message: `Your access token has been claims before create`,
+    status: HttpStatus.UNAUTHORIZED,
+  },
+  REFRESH_TOKEN_REQUIRE: {
+    name: `Refresh Token Empty`,
+    code: `1005`,
+    message: `Require refresh token in header`,
+    status: HttpStatus.UNAUTHORIZED,
+  },
+  REFRESH_TOKEN_EXPIRED: {
+    name: `Refresh Token Expired`,
+    code: `1006`,
+    message: `Your refresh token has been expired`,
+    status: HttpStatus.UNAUTHORIZED,
+  },
+  REFRESH_TOKEN_INVALID: {
+    name: `Refresh Token Invalid`,
+    code: `1007`,
+    message: `Your refresh token has been invalid`,
+    status: HttpStatus.UNAUTHORIZED,
+  },
+  REFRESH_TOKEN_CLAIMS_BEFORE: {
+    name: `Refresh Token Has Claims`,
+    code: `1008`,
+    message: `Your Refresh token has been claims before create`,
     status: HttpStatus.UNAUTHORIZED,
   },
 }

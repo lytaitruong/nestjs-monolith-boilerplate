@@ -10,11 +10,13 @@ export class GuardService {
     private readonly service: JwtService,
   ) {}
 
-  async signed(info: JwtInfo): Promise<string> {
+  async signed(type: 'access' | 'refresh', info: JwtInfo): Promise<string> {
     return this.service.signAsync(info, {
       algorithm: 'RS256',
-      expiresIn: this.config.get('guard.jwt.accessExpire'),
-      secret: this.config.get('guard.jwt.accessSecret'),
+      expiresIn:
+        type === 'access' ? this.config.get('guard.jwt.accessExpire') : this.config.get('guard.jwt.refreshExpire'),
+      secret:
+        type === 'access' ? this.config.get('guard.jwt.accessSecret') : this.config.get('guard.jwt.refreshSecret'),
     })
   }
 }

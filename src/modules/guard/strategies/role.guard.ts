@@ -13,11 +13,11 @@ export class RoleGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const roles = this.reflector.getAllAndOverride<string[]>(GuardType.ROLE, [context.getHandler(), context.getClass()])
-    if (!roles || roles.length === 0) return true
+    if (!roles) return true
 
     const req: IReqJwt = context.switchToHttp().getRequest()
 
-    if (roles.includes(req.user.role)) return true
+    if (req.user && roles.includes(req.user.role)) return true
 
     throw new AppException(GUARD_ERROR.FORBIDDEN_RESOURCE)
   }

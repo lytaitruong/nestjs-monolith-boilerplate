@@ -1,4 +1,5 @@
 export * from './strategies/access.guard'
+export * from './strategies/refresh.guard'
 export * from './strategies/role.guard'
 
 export * from './guard.decorator'

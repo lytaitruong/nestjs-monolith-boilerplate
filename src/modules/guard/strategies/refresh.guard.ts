@@ -9,12 +9,12 @@ import { GUARD_ERROR } from '../guard.exception'
 import { GuardType, JwtInfo } from '../guard.interface'
 
 @Injectable()
-export class JwtAccessStrategy extends PassportStrategy(Strategy, GuardType.ACCESS) {
+export class JwtRefreshStrategy extends PassportStrategy(Strategy, GuardType.REFRESH) {
   constructor(config: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: config.get('guard.jwt.accessPublic'),
+      secretOrKey: config.get('guard.jwt.refreshPublic'),
       algorithms: ['RS256'],
     } as StrategyOptions)
   }
@@ -24,16 +24,16 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, GuardType.ACCE
 }
 
 @Injectable()
-export class JwtAccessGuard extends AuthGuard(GuardType.ACCESS) {
+export class JwtRefreshGuard extends AuthGuard(GuardType.REFRESH) {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     return super.canActivate(context)
   }
   // !Warning NotBeforeError alway highest priority
   handleRequest<TUser = JwtInfo>(err: Error, user: JwtInfo, info: any): TUser {
-    if (info instanceof NotBeforeError) throw new AppException(GUARD_ERROR.ACCESS_TOKEN_CLAIMS_BEFORE)
-    if (info instanceof TokenExpiredError) throw new AppException(GUARD_ERROR.ACCESS_TOKEN_EXPIRED)
-    if (info instanceof JsonWebTokenError) throw new AppException(GUARD_ERROR.ACCESS_TOKEN_INVALID)
-    if (err || !user || !user.sub) throw new AppException(GUARD_ERROR.ACCESS_TOKEN_REQUIRE)
+    if (info instanceof NotBeforeError) throw new AppException(GUARD_ERROR.REFRESH_TOKEN_CLAIMS_BEFORE)
+    if (info instanceof TokenExpiredError) throw new AppException(GUARD_ERROR.REFRESH_TOKEN_EXPIRED)
+    if (info instanceof JsonWebTokenError) throw new AppException(GUARD_ERROR.REFRESH_TOKEN_INVALID)
+    if (err || !user || !user.sub) throw new AppException(GUARD_ERROR.REFRESH_TOKEN_REQUIRE)
 
     return user as TUser
   }

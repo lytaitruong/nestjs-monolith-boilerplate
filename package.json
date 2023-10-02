@@ -10,12 +10,9 @@
     "url": "https://github.com/lytaitruong/nestjs-monolith-boilerplate.git"
   },
   "keywords": [
-    "boilerplate",
-    "nodejs",
-    "nestjs",
-    "bun",
-    "prisma",
-    "postgresql"
+    "nestjs-boilerplate",
+    "nestjs-starter-template",
+    "nestjs-template"
   ],
   "scripts": {
     "build": "nest build",
