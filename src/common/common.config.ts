@@ -17,6 +17,10 @@ export const configuration = (): IConfig => ({
     secure: process.env.NODE_ENV !== Env.DEFAULT,
     httpOnly: process.env.NODE_ENV !== Env.DEFAULT,
   },
+  swagger: {
+    name: process.env.SWAGGER_NAME,
+    pass: process.env.SWAGGER_PASS,
+  },
 })
 
 /**

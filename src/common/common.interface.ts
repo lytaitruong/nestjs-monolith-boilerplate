@@ -16,10 +16,17 @@ export interface IConfigCookie {
   secure: boolean
   httpOnly: boolean
 }
+
+export interface IConfigSwagger {
+  name: string
+  pass: string
+}
+
 export interface IConfig {
   env: Env
   app: IConfigApp
   cookie: IConfigCookie
+  swagger?: IConfigSwagger
 }
 
 export type IReq = FastifyRequest
