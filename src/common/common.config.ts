@@ -17,7 +17,15 @@ export const configuration = (): IConfig => ({
     secure: process.env.NODE_ENV !== Env.DEFAULT,
     httpOnly: process.env.NODE_ENV !== Env.DEFAULT,
   },
+  ioredis: {
+    enable: process.env.IOREDIS_ENABLE === 'true' ?? false,
+    host: process.env.IOREDIS_HOST || 'localhost',
+    port: process.env.IOREDIS_PORT ? parseInt(process.env.IOREDIS_PORT) : 6379,
+    username: process.env.IOREDIS_USERNAME || 'default',
+    password: process.env.IOREDIS_PASSWORD,
+  },
   swagger: {
+    enable: process.env.SWAGGER_ENABLE === 'true' ?? false,
     name: process.env.SWAGGER_NAME,
     pass: process.env.SWAGGER_PASS,
   },

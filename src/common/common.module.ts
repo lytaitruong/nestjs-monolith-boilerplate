@@ -1,12 +1,23 @@
+import { CacheModule } from '@nestjs/cache-manager'
 import { Global, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { redisStore } from 'cache-manager-ioredis-yet'
 import { LoggerModule } from 'nestjs-pino'
 import { Env } from './common.enum'
-import { IConfig, IReq } from './common.interface'
+import { IConfig, IConfigIoredis, IReq } from './common.interface'
 
 @Global()
 @Module({
   imports: [
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService) => {
+        const { enable, ...ioredis } = config.get<IConfigIoredis>('ioredis')
+        return enable ? { store: await redisStore(ioredis) } : {}
+      },
+    }),
     LoggerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

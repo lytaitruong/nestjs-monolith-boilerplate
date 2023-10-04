@@ -3,10 +3,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { FastifyRequest, HookHandlerDoneFunction, RawReplyDefaultExpression } from 'fastify'
 
 export interface ISwaggerSecurity {
+  enable: boolean
   name: string
   pass: string
 }
-export const setupSwagger = (app: INestApplication, version: string, service: string, security?: ISwaggerSecurity) => {
+export const setupSwagger = (app: INestApplication, version: string, service: string, security: ISwaggerSecurity) => {
   const configDocument = new DocumentBuilder()
     .setTitle(`${service} APIs`)
     .setVersion(version)
@@ -26,7 +27,7 @@ export const setupSwagger = (app: INestApplication, version: string, service: st
     .build()
   const document = SwaggerModule.createDocument(app, configDocument)
 
-  if (security) {
+  if (security.enable) {
     const adapter = app.getHttpAdapter()
     adapter.use(
       `/api/v1/docs`,
@@ -56,7 +57,7 @@ export const setupSwagger = (app: INestApplication, version: string, service: st
   })
 }
 
-const parseAuth = (input: string): ISwaggerSecurity => {
+const parseAuth = (input: string): Omit<ISwaggerSecurity, 'enable'> => {
   const [, encodedPart] = input.split(' ')
 
   const text = Buffer.from(encodedPart, 'base64').toString('ascii')

@@ -52,8 +52,11 @@
 - [x] Setup Centralize Handling Error
 - [x] Setup Middleware Utilize
 - [x] Setup Logger & Plugin
-- [ ] Setup Auth JWT
-- [ ] Setup Cache using Redis or Local LRU
+- [x] Setup Auth JWT
+  - [ ] Integration with Oauth2 Google
+  - [ ] Integration with Oauth2 Github
+  - [ ] Update database for Auth
+- [x] Setup Cache using Redis or Local LRU
 - [ ] Setup Docker
 - [ ] Setup Queue using Bull
 - [ ] Setup Upload file ([Aws S3](https://aws.amazon.com/s3/))

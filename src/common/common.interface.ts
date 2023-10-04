@@ -2,6 +2,8 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { PaginatedResult } from 'prisma-pagination'
 import { Env } from './common.enum'
 
+export type TEnable = { enable: boolean }
+
 export interface IConfigApp {
   port: number
   version: string
@@ -17,7 +19,14 @@ export interface IConfigCookie {
   httpOnly: boolean
 }
 
-export interface IConfigSwagger {
+export interface IConfigIoredis extends TEnable {
+  host: string
+  port: number
+  username: string
+  password: string
+}
+
+export interface IConfigSwagger extends TEnable {
   name: string
   pass: string
 }
@@ -26,7 +35,8 @@ export interface IConfig {
   env: Env
   app: IConfigApp
   cookie: IConfigCookie
-  swagger?: IConfigSwagger
+  ioredis: IConfigIoredis
+  swagger: IConfigSwagger
 }
 
 export type IReq = FastifyRequest
