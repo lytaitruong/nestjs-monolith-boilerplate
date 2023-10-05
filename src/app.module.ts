@@ -4,6 +4,7 @@ import { Inject, Module, OnModuleDestroy } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { Cache } from 'cache-manager'
 import { RedisStore } from 'cache-manager-ioredis-yet'
+import { UserModule } from './api/user/user.module'
 import { AppController } from './app.controller'
 import { PrismaModule } from './modules/prisma'
 
@@ -18,6 +19,7 @@ import { PrismaModule } from './modules/prisma'
     }),
     CommonModule,
     PrismaModule,
+    UserModule,
   ],
   controllers: [AppController],
 })
