@@ -1,8 +1,11 @@
-import { Module } from '@nestjs/common'
+import { CommonModule, configuration } from '@/common'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Inject, Module, OnModuleDestroy } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
+import { Cache } from 'cache-manager'
+import { RedisStore } from 'cache-manager-ioredis-yet'
 import { AppController } from './app.controller'
-import { CommonModule, configuration } from './common'
-import { PrismaModule } from './modules/prisma/prisma.module'
+import { PrismaModule } from './modules/prisma'
 
 @Module({
   imports: [
@@ -18,4 +21,10 @@ import { PrismaModule } from './modules/prisma/prisma.module'
   ],
   controllers: [AppController],
 })
-export class AppModule {}
+export class AppModule implements OnModuleDestroy {
+  constructor(@Inject(CACHE_MANAGER) private readonly cache: Cache) {}
+
+  onModuleDestroy() {
+    ;(this.cache.store as RedisStore).client.quit()
+  }
+}

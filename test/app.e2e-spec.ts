@@ -15,6 +15,10 @@ describe('AppController (e2e)', () => {
     await app.init()
   })
 
+  afterAll(async () => {
+    await app.close()
+  })
+
   it('/ (GET healthcheck)', () => {
     return request(app.getHttpServer()).get('/healthcheck').expect(200).expect('Ping!')
   })

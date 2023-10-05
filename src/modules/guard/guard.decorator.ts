@@ -6,7 +6,7 @@ import { JwtAccessGuard } from './strategies/access.guard'
 import { RoleGuard } from './strategies/role.guard'
 
 // ! The order of guard is important, which will be execute first
-export const AuthController = (name: string, tags: string) => {
+export const GuardController = (name: string, tags = name) => {
   return applyDecorators(
     Controller(name),
     ApiTags(tags),
