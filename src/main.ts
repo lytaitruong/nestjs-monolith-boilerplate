@@ -27,12 +27,12 @@ async function bootstrap() {
   const logger = app.get(Logger)
   // CONFIG
   const { port, version, service, whitelist } = config.get<IConfigApp>('app')
-  const { path, secret, secure, httpOnly } = config.get<IConfigCookie>('cookie')
+  const { domain, path, secret, secure, httpOnly } = config.get<IConfigCookie>('cookie')
   // PLUGIN
   app.setGlobalPrefix(`api/${version}`)
   app.register(helmet, helmetSetting)
   app.register(upload, uploadSetting)
-  app.register(cookie, { secret, parseOptions: { sameSite: 'strict', path, secure, httpOnly } })
+  app.register(cookie, { secret, parseOptions: { sameSite: 'strict', domain, path, secure, httpOnly } })
   app.register(compression, { encodings: ['gzip', 'deflate'] })
   app.register(csrf, {
     sessionPlugin: '@fastify/cookie',

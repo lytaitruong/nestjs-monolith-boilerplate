@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
+import { createId } from '@paralleldrive/cuid2'
 import { JwtInfo } from './guard.interface'
 
 @Injectable()
@@ -10,13 +11,21 @@ export class GuardService {
     private readonly service: JwtService,
   ) {}
 
-  async signed(type: 'access' | 'refresh', info: JwtInfo): Promise<string> {
+  get maxAgeAccess(): number {
+    return this.config.get('guard.jwt.accessMaxAge')
+  }
+
+  get maxAgeRefresh(): number {
+    return this.config.get('guard.jwt.refreshMaxAge')
+  }
+
+  async signed(type: 'access' | 'refresh', info: JwtInfo, maxAge?: number): Promise<string> {
     return this.service.signAsync(info, {
       algorithm: 'RS256',
-      expiresIn:
-        type === 'access' ? this.config.get('guard.jwt.accessExpire') : this.config.get('guard.jwt.refreshExpire'),
+      expiresIn: maxAge ?? (type === 'access' ? this.maxAgeAccess : this.maxAgeRefresh),
       secret:
         type === 'access' ? this.config.get('guard.jwt.accessSecret') : this.config.get('guard.jwt.refreshSecret'),
+      jwtid: createId(),
     })
   }
 }

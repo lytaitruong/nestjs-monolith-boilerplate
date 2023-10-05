@@ -24,13 +24,35 @@ enum Status {
   DEACTIVATE @map("deactivate")
 }
 
+enum Provider {
+  NORMAL @map("normal")
+  GITHUB @map("github")
+  GOOGLE @map("google")
+}
+
+model Auth {
+  userId       String   @map("user_id") @db.VarChar(28)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  device       String   @db.VarChar(128)
+  provider     Provider @default(NORMAL)
+  refreshToken String   @map("refresh_token") @db.VarChar(255)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@id([userId, device])
+  @@map("auth")
+}
+
 model User {
   id        String   @id @default(cuid()) @db.VarChar(28)
-  phone     String   @unique @db.VarChar(15)
-  password  String   @db.VarChar(255)
+  phone     String?  @unique @db.VarChar(15)
+  email     String?  @unique @db.VarChar(64)
+  password  String?  @db.VarChar(128)
+  avatar    String?  @db.VarChar(128)
+  status    Status?  @default(INACTIVE)
+  gender    Gender?  @default(MALE)
   role      Role     @default(USER)
-  gender    Gender   @default(MALE)
-  status    Status   @default(INACTIVE)
+  auth      Auth[]
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

@@ -27,7 +27,7 @@ import { IConfig, IConfigIoredis, IReq } from './common.interface'
           pinoHttp: {
             useLevel: 'info',
             level: config.get('env') !== Env.PRODUCTION ? 'debug' : 'info',
-            redact: ['request.headers.authorization', 'request.headers.cookie', 'body.password'],
+            redact: ['req.headers.authorization', 'req.headers.cookie', 'body.password'],
             autoLogging: {
               ignore: (req) => {
                 return (

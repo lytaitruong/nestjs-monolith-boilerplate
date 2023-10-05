@@ -3,6 +3,8 @@ import { JwtPayload } from 'jsonwebtoken'
 
 export enum GuardType {
   ROLE = 'role',
+  GOOGLE = 'google',
+  GITHUB = 'github',
   ACCESS = 'access-jwt',
   REFRESH = 'refresh-jwt',
 }
@@ -15,11 +17,9 @@ export enum GuardCookie {
 export interface IConfigJwt {
   accessSecret: string
   accessPublic: string
-  accessExpire: string
   accessMaxAge: number
   refreshSecret: string
   refreshPublic: string
-  refreshExpire: string
   refreshMaxAge: number
 }
 
@@ -30,6 +30,10 @@ export interface IConfigGuard {
 export type JwtInfo = Omit<JwtPayload, 'sub'> & {
   sub: CUID
   role: string
+  device: string
+
+  iat?: number
+  exp?: number
 }
 
 export type IReqJwt = IReq & { user: JwtInfo }
