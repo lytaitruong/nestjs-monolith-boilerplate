@@ -35,7 +35,7 @@ model Auth {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   device       String   @db.VarChar(128)
   provider     Provider @default(NORMAL)
-  refreshToken String   @map("refresh_token") @db.VarChar(255)
+  refreshToken String?  @map("refresh_token") @db.VarChar(255)
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
