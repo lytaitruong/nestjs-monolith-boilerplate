@@ -6,13 +6,19 @@ import { JsonWebTokenError, NotBeforeError, TokenExpiredError } from 'jsonwebtok
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt'
 import { Observable } from 'rxjs'
 import { GUARD_ERROR } from '../guard.exception'
-import { GuardType, JwtInfo } from '../guard.interface'
+import { GuardCookie, GuardType, JwtInfo } from '../guard.interface'
 
+/**
+ *! Not using Redis to make a blacklist token, why -> The number of invalid tokens increases over time
+ */
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(Strategy, GuardType.ACCESS) {
   constructor(config: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req) => req.cookies[GuardCookie.ACCESS_TOKEN],
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       ignoreExpiration: false,
       secretOrKey: config.get('guard.jwt.accessPublic'),
       algorithms: ['RS256'],
