@@ -1,8 +1,9 @@
 import { ApiPassedRes, HEADERS, IRes } from '@/common'
-import { HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common'
+import { Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { GuardCookieRes, GuardRefreshRes } from './guard.dto'
-import { GuardCookie, GuardType, IGuardService, IReqJwt } from './guard.interface'
+import { GuardCookieRes, GuardOauth2Res, GuardRefreshRes } from './guard.dto'
+import { GuardCookie, GuardType, IGuardService, IReqJwt, IReqOauth2 } from './guard.interface'
+import { GoogleOauth2Guard } from './oauth/google.guard'
 import { JwtAccessGuard } from './strategies/access.guard'
 import { JwtRefreshGuard } from './strategies/refresh.guard'
 
@@ -32,6 +33,19 @@ export abstract class GuardController {
       req.headers[HEADERS.AUTHORIZATION].replace('Bearer ', '') // If a mobile
     const response = await this.service.refreshToken(req.user, token, maxAgeRefresh)
     return this.setCookie(res, response, maxAgeRefresh).send(response)
+  }
+
+  @UseGuards(GoogleOauth2Guard)
+  @Get('google')
+  async googleAuth() {}
+
+  @UseGuards(GoogleOauth2Guard)
+  @HttpCode(HttpStatus.OK)
+  @ApiPassedRes(GuardOauth2Res, HttpStatus.OK)
+  @Get('google-redirect')
+  async googleRedirect(@Req() req: IReqOauth2, @Res() res: IRes) {
+    const response = await this.service.oauth2(req.user)
+    return this.setCookie(res, response).send(response)
   }
 
   protected setCookie(

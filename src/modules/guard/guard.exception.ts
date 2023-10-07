@@ -11,6 +11,7 @@ export type GuardCode =
   | 'REFRESH_TOKEN_EXPIRED'
   | 'REFRESH_TOKEN_INVALID'
   | 'REFRESH_TOKEN_CLAIMS_BEFORE'
+  | 'GOOGLE_OAUTH_INVALID'
 
 export const GUARD_ERROR: Record<GuardCode, IAppError> = {
   FORBIDDEN_RESOURCE: {
@@ -65,6 +66,12 @@ export const GUARD_ERROR: Record<GuardCode, IAppError> = {
     name: `Refresh Token Has Claims`,
     code: `1008`,
     message: `Your Refresh token has been claims before create`,
+    status: HttpStatus.UNAUTHORIZED,
+  },
+  GOOGLE_OAUTH_INVALID: {
+    name: `Google Token Invalid`,
+    code: `1009`,
+    message: `Your google code & state has been invalid`,
     status: HttpStatus.UNAUTHORIZED,
   },
 }

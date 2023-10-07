@@ -53,7 +53,7 @@
 - [x] Setup Middleware Utilize
 - [x] Setup Logger & Plugin
 - [x] Setup Auth JWT
-  - [ ] Integration with Oauth2 Google
+  - [x] Integration with Oauth2 Google
   - [ ] Integration with Oauth2 Github
   - [ ] Update database for Auth
 - [x] Setup Cache using Redis or Local LRU

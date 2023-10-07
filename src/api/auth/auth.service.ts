@@ -1,6 +1,6 @@
 import { AppException, scryptHash, scryptVerify } from '@/common'
-import { GuardService, IGuardService, JwtInfo } from '@/modules/guard'
-import { GuardRefreshRes } from '@/modules/guard/guard.dto'
+import { GuardService, IGuardService, JwtInfo, Oauth2Info } from '@/modules/guard'
+import { GuardCookieRes, GuardRefreshRes } from '@/modules/guard/guard.dto'
 import { PrismaService } from '@/modules/prisma'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
@@ -72,5 +72,9 @@ export class AuthService implements IGuardService {
       throw new AppException(AUTH_ERROR.USER_HAS_BEEN_DEACTIVATE)
     }
     return auth
+  }
+
+  async oauth2(info: Oauth2Info): Promise<GuardCookieRes> {
+    return { accessToken: info.oauth2.accessToken, refreshToken: info.oauth2.refreshToken }
   }
 }
