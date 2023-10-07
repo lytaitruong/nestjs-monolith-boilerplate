@@ -1,6 +1,7 @@
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface'
 
 export const HEADERS = {
+  USER_AGENT: 'user-agent',
   CONTENT_TYPE: 'content-type',
   CONTENT_ENCODING: 'content-encoding',
   CONTENT_DISPOSITION: 'content-disposition',

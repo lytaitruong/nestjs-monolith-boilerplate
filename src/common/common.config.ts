@@ -1,5 +1,4 @@
-import { createId } from '@paralleldrive/cuid2'
-import { randomBytes } from 'crypto'
+import { randomBytes, randomUUID } from 'crypto'
 import { Env, IConfig } from '.'
 
 export const configuration = (): IConfig => ({
@@ -67,4 +66,4 @@ export const helmetSetting = () => ({
 /**
  * @returns generateId for request.id header
  */
-export const genReqId = (req: { id: any; headers: { [x: string]: any } }): string => req.id ?? createId()
+export const genReqId = (req: { id: any; headers: { [x: string]: any } }): string => req.id ?? randomUUID()

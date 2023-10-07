@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
-import { createId } from '@paralleldrive/cuid2'
+import { randomUUID } from 'crypto'
 import { JwtInfo } from './guard.interface'
 
 @Injectable()
@@ -25,7 +25,7 @@ export class GuardService {
       expiresIn: maxAge ?? (type === 'access' ? this.maxAgeAccess : this.maxAgeRefresh),
       secret:
         type === 'access' ? this.config.get('guard.jwt.accessSecret') : this.config.get('guard.jwt.refreshSecret'),
-      jwtid: createId(),
+      jwtid: randomUUID(),
     })
   }
 }
