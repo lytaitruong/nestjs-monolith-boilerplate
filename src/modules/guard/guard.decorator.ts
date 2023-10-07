@@ -1,7 +1,12 @@
-import { ApiFailedRes } from '@/common'
-import { Controller, ExecutionContext, UseGuards, applyDecorators } from '@nestjs/common'
+import { ApiFailedRes, TTL } from '@/common'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Controller, ExecutionContext, Inject, UseGuards, applyDecorators } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { Cache } from 'cache-manager'
+import { randomUUID } from 'crypto'
+import { getClientIp } from 'request-ip'
 import { GUARD_ERROR } from './guard.exception'
+import { GuardProvider, IReqOauth2 } from './guard.interface'
 import { JwtAccessGuard } from './strategies/access.guard'
 import { RoleGuard } from './strategies/role.guard'
 
@@ -41,6 +46,34 @@ export const GuardOauth2Context = () => {
       req.res = res
 
       return originalMethod.call(this, context)
+    }
+  }
+}
+
+export const GuardOauth2Session = (provider: GuardProvider) => {
+  const inject = Inject(CACHE_MANAGER)
+
+  return (target: unknown, _propertyKey: string, descriptor: PropertyDescriptor) => {
+    inject(target, CACHE_MANAGER) // equals constructor(@Inject(CACHE_MANAGER) cache: Cache)
+    const originalMethod = descriptor.value
+
+    descriptor.value = async function (req: IReqOauth2, options: any) {
+      const cache: Cache = this.cache
+      const ip = getClientIp(req)
+      // Flow verify code and state
+      if (req.query && req.query['state'] && req.query['code']) {
+        const state = await cache.get(`OAUTH_${provider}_${ip}`)
+
+        if (state === req.query['state']) req.state = true
+
+        await cache.del(`OAUTH_${provider}_${ip}`)
+      }
+      // Flow request prompt oauth2
+      else {
+        options.state = randomUUID()
+        cache.set(`OAUTH_${provider}_${ip}`, options.state, TTL.ONE_MINUTE * 1000)
+      }
+      return originalMethod.call(this, req, options)
     }
   }
 }

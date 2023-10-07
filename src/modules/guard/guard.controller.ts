@@ -1,7 +1,8 @@
-import { ApiPassedRes, HEADERS, IRes } from '@/common'
+import { ApiPassedRes, AppException, HEADERS, IRes } from '@/common'
 import { Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { GuardCookieRes, GuardOauth2Res, GuardRefreshRes } from './guard.dto'
+import { GUARD_ERROR } from './guard.exception'
 import { GuardCookie, GuardType, IGuardService, IReqJwt, IReqOauth2 } from './guard.interface'
 import { GithubOauth2Guard } from './oauth/github.guard'
 import { GoogleOauth2Guard } from './oauth/google.guard'
@@ -45,6 +46,8 @@ export abstract class GuardController {
   @ApiPassedRes(GuardOauth2Res, HttpStatus.OK)
   @Get('google-redirect')
   async googleRedirect(@Req() req: IReqOauth2, @Res() res: IRes) {
+    if (!req.state) throw new AppException(GUARD_ERROR.OAUTH2_STATE_INVALID)
+
     const response = await this.service.oauth2(req.user)
     return this.setCookie(res, response).send(response)
   }
@@ -58,6 +61,8 @@ export abstract class GuardController {
   @ApiPassedRes(GuardOauth2Res, HttpStatus.OK)
   @Get('github-redirect')
   async githubRedirect(@Req() req: IReqOauth2, @Res() res: IRes) {
+    if (!req.state) throw new AppException(GUARD_ERROR.OAUTH2_STATE_INVALID)
+
     const response = await this.service.oauth2(req.user)
     return this.setCookie(res, response).send(response)
   }

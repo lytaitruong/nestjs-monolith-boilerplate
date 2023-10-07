@@ -1,16 +1,21 @@
 import { AppException } from '@/common'
-import { ExecutionContext, Injectable } from '@nestjs/common'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { ExecutionContext, Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { AuthGuard, PassportStrategy } from '@nestjs/passport'
+import { Cache } from 'cache-manager'
 import { Profile, Strategy, StrategyOptions } from 'passport-github2'
 import { Observable } from 'rxjs'
-import { GuardOauth2Context } from '../guard.decorator'
+import { GuardOauth2Context, GuardOauth2Session } from '../guard.decorator'
 import { GUARD_ERROR } from '../guard.exception'
 import { GuardProvider, IConfigGithubOauth2, Oauth2Info } from '../guard.interface'
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, GuardProvider.GITHUB) {
-  constructor(config: ConfigService) {
+  constructor(
+    config: ConfigService,
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
+  ) {
     super(config.get<IConfigGithubOauth2>('guard.github') as StrategyOptions)
   }
 
@@ -21,7 +26,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, GuardProvider.GIT
       name:
         profile.displayName ||
         (profile.name ? profile.name.givenName + ' ' + profile.name.familyName : profile.username),
-      email: profile.emails[0].value,
+      email: profile.emails?.[0].value,
       image: profile.photos?.[0].value,
       provider: GuardProvider.GITHUB,
       oauth2: {
@@ -31,6 +36,11 @@ export class GithubStrategy extends PassportStrategy(Strategy, GuardProvider.GIT
       },
     }
     done(null, info)
+  }
+
+  @GuardOauth2Session(GuardProvider.GITHUB)
+  authenticate(req, options?: StrategyOptions): void {
+    return super.authenticate(req, options)
   }
 }
 

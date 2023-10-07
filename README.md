@@ -54,7 +54,7 @@
 - [x] Setup Logger & Plugin
 - [x] Setup Auth JWT
   - [x] Integration with Oauth2 Google
-  - [ ] Integration with Oauth2 Github
+  - [x] Integration with Oauth2 Github
   - [ ] Update database for Auth
 - [x] Setup Cache using Redis or Local LRU
 - [ ] Setup Docker

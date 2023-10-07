@@ -13,6 +13,7 @@ export type GuardCode =
   | 'REFRESH_TOKEN_CLAIMS_BEFORE'
   | 'GOOGLE_OAUTH_INVALID'
   | 'GITHUB_OAUTH_INVALID'
+  | 'OAUTH2_STATE_INVALID'
 
 export const GUARD_ERROR: Record<GuardCode, IAppError> = {
   FORBIDDEN_RESOURCE: {
@@ -79,6 +80,12 @@ export const GUARD_ERROR: Record<GuardCode, IAppError> = {
     name: `Github Token Invalid`,
     code: `1010`,
     message: `Your github code & state has been invalid`,
+    status: HttpStatus.UNAUTHORIZED,
+  },
+  OAUTH2_STATE_INVALID: {
+    name: `Oauth2 State Invalid`,
+    code: `1011`,
+    message: `Your oauth2 state has been expired or invalid to prevent attack CSRF`,
     status: HttpStatus.UNAUTHORIZED,
   },
 }

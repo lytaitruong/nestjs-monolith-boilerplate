@@ -66,7 +66,7 @@ export interface Oauth2Info {
     refreshToken: string
   }
 }
-export type IReqOauth2 = IReq & { user: Oauth2Info }
+export type IReqOauth2 = IReq & { user: Oauth2Info; state: boolean }
 
 export interface IGuardService {
   signOut(info: JwtInfo): Promise<void>
