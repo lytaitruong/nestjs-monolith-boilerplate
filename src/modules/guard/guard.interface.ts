@@ -35,10 +35,12 @@ export interface IConfigOauth2 {
 }
 
 export type IConfigGoogleOauth2 = IConfigOauth2
+export type IConfigGithubOauth2 = IConfigOauth2
 
 export interface IConfigGuard {
   jwt: IConfigJwt
   google: IConfigGoogleOauth2
+  github: IConfigGithubOauth2
 }
 
 export type JwtInfo = Omit<JwtPayload, 'sub'> & {

@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { IConfigGuard } from './guard.interface'
 import { GuardService } from './guard.service'
+import { GithubStrategy } from './oauth/github.guard'
 import { GoogleStrategy } from './oauth/google.guard'
 import { JwtAccessStrategy } from './strategies/access.guard'
 import { JwtRefreshStrategy } from './strategies/refresh.guard'
@@ -28,13 +29,19 @@ import { JwtRefreshStrategy } from './strategies/refresh.guard'
             callbackURL: process.env.GOOGLE_CALLBACK_URL,
             scope: process.env.GOOGLE_SCOPE ? process.env.GOOGLE_SCOPE.split(',') : [],
           },
+          github: {
+            clientID: process.env.GITHUB_CLIENT_ID,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET,
+            callbackURL: process.env.GITHUB_CALLBACK_URL,
+            scope: process.env.GITHUB_SCOPE ? process.env.GITHUB_SCOPE.split(',') : [],
+          },
         }),
       ),
     ),
     JwtModule.register({}),
     PassportModule.register({ session: false }),
   ],
-  exports: [JwtAccessStrategy, JwtRefreshStrategy, GoogleStrategy, GuardService],
-  providers: [JwtAccessStrategy, JwtRefreshStrategy, GoogleStrategy, GuardService],
+  exports: [JwtAccessStrategy, JwtRefreshStrategy, GoogleStrategy, GithubStrategy, GuardService],
+  providers: [JwtAccessStrategy, JwtRefreshStrategy, GoogleStrategy, GithubStrategy, GuardService],
 })
 export class GuardModule {}
