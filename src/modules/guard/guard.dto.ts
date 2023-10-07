@@ -1,6 +1,6 @@
 import { IsSwaggerString } from '@/common'
 
-export class AuthCookieRes {
+export class GuardCookieRes {
   @IsSwaggerString()
   accessToken: string
 
@@ -8,7 +8,9 @@ export class AuthCookieRes {
   refreshToken: string
 }
 
-export class AuthRefreshRes extends AuthCookieRes {
+export class GuardRefreshRes extends GuardCookieRes {
   @IsSwaggerString()
   type: string
 }
+
+export class GuardOauth2Res extends GuardCookieRes {}

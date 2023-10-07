@@ -1,14 +1,14 @@
 import { AppException, scryptHash, scryptVerify } from '@/common'
-import { GuardService, JwtInfo } from '@/modules/guard'
+import { GuardService, IGuardService, JwtInfo } from '@/modules/guard'
+import { GuardRefreshRes } from '@/modules/guard/guard.dto'
 import { PrismaService } from '@/modules/prisma'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Status } from '@prisma/client'
 import { AUTH_ERROR } from './auth.exception'
-import { AuthRefreshRes } from './auth.res'
 
 @Injectable()
-export class AuthService {
+export class AuthService implements IGuardService {
   private readonly logger = new Logger(AuthService.name)
 
   constructor(
@@ -23,7 +23,7 @@ export class AuthService {
     await this.prisma.auth.update({
       where: { userId_device: { userId: info.sub, device: info.device } },
       data: { refreshToken: null },
-      select: { provider: true },
+      select: { userId: true },
     })
   }
 
@@ -35,7 +35,7 @@ export class AuthService {
    *TODO: Should make Refresh Token rotation in per day instead of each request but not change expire time
    *? Reference: https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
    */
-  async refreshToken(info: JwtInfo, token: string, maxAge: number): Promise<AuthRefreshRes> {
+  async refreshToken(info: JwtInfo, token: string, maxAge: number): Promise<GuardRefreshRes> {
     const auth = await this.isDeviceExistAndActive(info)
 
     if (!auth.refreshToken || (await scryptVerify(token, auth.refreshToken)) === false) {
@@ -51,7 +51,7 @@ export class AuthService {
     await this.prisma.auth.update({
       where: { userId_device: { userId: info.sub, device: info.device } },
       data: { refreshToken: await scryptHash(refreshToken) },
-      select: { provider: true },
+      select: { userId: true },
     })
 
     return {

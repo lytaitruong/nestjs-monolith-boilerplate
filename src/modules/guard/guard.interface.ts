@@ -1,5 +1,6 @@
 import { CUID, IReq } from '@/common'
 import { JwtPayload } from 'jsonwebtoken'
+import { GuardRefreshRes } from './guard.dto'
 
 export enum GuardType {
   ROLE = 'role',
@@ -37,3 +38,8 @@ export type JwtInfo = Omit<JwtPayload, 'sub'> & {
 }
 
 export type IReqJwt = IReq & { user: JwtInfo }
+
+export interface IGuardService {
+  signOut(info: JwtInfo): Promise<void>
+  refreshToken(info: JwtInfo, token: string, maxAge: number): Promise<GuardRefreshRes>
+}
