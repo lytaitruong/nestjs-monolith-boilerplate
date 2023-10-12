@@ -1,5 +1,5 @@
 import { IsSwaggerDate, IsSwaggerEnum, IsSwaggerString } from '@/common'
-import { $Enums, User } from '@prisma/client'
+import { Gender, User } from '@prisma/client'
 
 export class UserProfileRes implements Partial<User> {
   @IsSwaggerString({ required: true })
@@ -14,8 +14,8 @@ export class UserProfileRes implements Partial<User> {
   @IsSwaggerString({ required: false, nullable: true })
   image: string | null
 
-  @IsSwaggerEnum($Enums.Gender, { required: false, nullable: true })
-  gender: $Enums.Gender | null
+  @IsSwaggerEnum(Gender, { required: false, nullable: true })
+  gender: Gender | null
 
   @IsSwaggerDate()
   createdAt: Date

@@ -1,0 +1,7 @@
+*
+!src/**
+!prisma/schema.prisma
+!bun.lockb
+!package*.json
+!tsconfig.json
+!tsconfig.*.json

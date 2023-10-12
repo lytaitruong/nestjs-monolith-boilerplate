@@ -57,7 +57,7 @@
   - [x] Integration with Oauth2 Github
   - [x] Update database for Auth
 - [x] Setup Cache using Redis or Local LRU
-- [ ] Setup Docker
+- [x] Setup Docker
 - [ ] Setup Queue using Bull
 - [ ] Setup Upload file ([Aws S3](https://aws.amazon.com/s3/))
 - [ ] Setup Webhook ([Stripe](https://stripe.com/))
