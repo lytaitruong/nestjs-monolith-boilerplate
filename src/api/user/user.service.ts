@@ -14,7 +14,7 @@ export class UserService {
   async getProfile(info: JwtInfo): Promise<Partial<User>> {
     const user = await this.prisma.user.findUnique({
       where: { id: info.sub },
-      select: { id: true, email: true, phone: true, avatar: true, gender: true, status: true, createdAt: true },
+      select: { id: true, email: true, image: true, state: true, gender: true },
     })
 
     return user

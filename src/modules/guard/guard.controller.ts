@@ -1,6 +1,8 @@
 import { ApiPassedRes, AppException, HEADERS, IRes } from '@/common'
 import { Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { IDevice } from 'ua-parser-js'
+import { Device } from './guard.decorator'
 import { GuardCookieRes, GuardOauth2Res, GuardRefreshRes } from './guard.dto'
 import { GUARD_ERROR } from './guard.exception'
 import { GuardCookie, GuardType, IGuardService, IReqJwt, IReqOauth2 } from './guard.interface'
@@ -31,8 +33,10 @@ export abstract class GuardController {
   async refreshToken(@Req() req: IReqJwt, @Res() res: IRes) {
     const maxAgeRefresh = req.user.exp - ((Date.now() / 1000) | 0)
     const token =
-      req.cookies[GuardType.REFRESH] || // If a web
-      req.headers[HEADERS.AUTHORIZATION].replace('Bearer ', '') // If a mobile
+      // If a web
+      req.cookies[GuardType.REFRESH] ||
+      // If a mobile
+      req.headers[HEADERS.AUTHORIZATION].replace('Bearer ', '')
     const response = await this.service.refreshToken(req.user, token, maxAgeRefresh)
     return this.setCookie(res, response, maxAgeRefresh).send(response)
   }
@@ -45,10 +49,10 @@ export abstract class GuardController {
   @HttpCode(HttpStatus.OK)
   @ApiPassedRes(GuardOauth2Res, HttpStatus.OK)
   @Get('google-redirect')
-  async googleRedirect(@Req() req: IReqOauth2, @Res() res: IRes) {
+  async googleRedirect(@Req() req: IReqOauth2, @Device() device: IDevice, @Res() res: IRes) {
     if (!req.state) throw new AppException(GUARD_ERROR.OAUTH2_STATE_INVALID)
 
-    const response = await this.service.oauth2(req.user)
+    const response = await this.service.oauth2(req.user, device)
     return this.setCookie(res, response).send(response)
   }
 
@@ -60,10 +64,10 @@ export abstract class GuardController {
   @HttpCode(HttpStatus.OK)
   @ApiPassedRes(GuardOauth2Res, HttpStatus.OK)
   @Get('github-redirect')
-  async githubRedirect(@Req() req: IReqOauth2, @Res() res: IRes) {
+  async githubRedirect(@Req() req: IReqOauth2, @Device() device: IDevice, @Res() res: IRes) {
     if (!req.state) throw new AppException(GUARD_ERROR.OAUTH2_STATE_INVALID)
 
-    const response = await this.service.oauth2(req.user)
+    const response = await this.service.oauth2(req.user, device)
     return this.setCookie(res, response).send(response)
   }
 

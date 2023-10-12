@@ -1,11 +1,14 @@
 import { AppException, scryptHash, scryptVerify } from '@/common'
 import { GuardService, IGuardService, JwtInfo, Oauth2Info } from '@/modules/guard'
-import { GuardCookieRes, GuardRefreshRes } from '@/modules/guard/guard.dto'
+import { GuardRefreshRes } from '@/modules/guard/guard.dto'
 import { PrismaService } from '@/modules/prisma'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Status } from '@prisma/client'
+import { createId } from '@paralleldrive/cuid2'
+import { Provider, Role, Status } from '@prisma/client'
+import { IDevice } from 'ua-parser-js'
 import { AUTH_ERROR } from './auth.exception'
+import { AuthOauth2Res } from './auth.res'
 
 @Injectable()
 export class AuthService implements IGuardService {
@@ -74,7 +77,47 @@ export class AuthService implements IGuardService {
     return auth
   }
 
-  async oauth2(info: Oauth2Info): Promise<GuardCookieRes> {
-    return { accessToken: info.oauth2.accessToken, refreshToken: info.oauth2.refreshToken }
+  async oauth2(info: Oauth2Info, agentDevice: IDevice): Promise<AuthOauth2Res> {
+    const device = `${agentDevice.vendor} + ${agentDevice.model} + ${agentDevice.type}`.trim()
+
+    const user = await this.prisma.user.findUnique({
+      where: { email: info.email },
+      select: { id: true, email: true, image: true, status: true, provider: true, auth: { where: { device } } },
+    })
+    const sub = createId()
+    const [accessToken, refreshToken] = await Promise.all([
+      this.guard.signed('access', { sub: user?.id ?? sub, device, role: Role.USER }),
+      this.guard.signed('refresh', { sub: user?.id ?? sub, device, role: Role.USER }),
+    ])
+    if (user) {
+      if (user.provider !== info.provider.toUpperCase()) {
+        const error = Object.assign({}, AUTH_ERROR.EMAIL_EXIST)
+        error.message += ` via ${user.provider}`
+        throw new AppException(error)
+      }
+      if (user.status !== Status.ACTIVE) throw new AppException(AUTH_ERROR.USER_HAS_BEEN_DEACTIVATE)
+      if (!user.auth) {
+        //! Warning legitimate user, are they login a new device or not ? If not banned all device
+      }
+      await this.prisma.auth.upsert({
+        where: { userId_device: { userId: user.id, device } },
+        create: { userId: user.id, device, refreshToken: await scryptHash(refreshToken) },
+        update: { refreshToken: await scryptHash(refreshToken) },
+      })
+
+      return { user, accessToken, refreshToken }
+    }
+    const newUser = await this.prisma.user.create({
+      data: {
+        id: sub,
+        email: info.email,
+        phone: info.phone,
+        image: info.image,
+        provider: info.provider.toUpperCase() === Provider.GOOGLE ? Provider.GOOGLE : Provider.GITHUB,
+        auth: { create: { device, refreshToken: await scryptHash(refreshToken) } },
+      },
+      select: { id: true, email: true, image: true, state: true, gender: true, createdAt: true },
+    })
+    return { user: newUser, accessToken, refreshToken }
   }
 }

@@ -1,5 +1,6 @@
 import { CUID, IReq } from '@/common'
 import { JwtPayload } from 'jsonwebtoken'
+import { IDevice } from 'ua-parser-js'
 import { GuardOauth2Res, GuardRefreshRes } from './guard.dto'
 
 export enum GuardProvider {
@@ -71,5 +72,5 @@ export type IReqOauth2 = IReq & { user: Oauth2Info; state: boolean }
 export interface IGuardService {
   signOut(info: JwtInfo): Promise<void>
   refreshToken(info: JwtInfo, token: string, maxAge: number): Promise<GuardRefreshRes>
-  oauth2(info: Oauth2Info): Promise<GuardOauth2Res>
+  oauth2(info: Oauth2Info, device: IDevice): Promise<GuardOauth2Res>
 }

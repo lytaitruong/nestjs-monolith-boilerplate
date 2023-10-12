@@ -1,7 +1,8 @@
-import { CacheModule } from '@nestjs/cache-manager'
-import { Global, Module } from '@nestjs/common'
+import { CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager'
+import { Global, Inject, Module, OnModuleDestroy } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { redisStore } from 'cache-manager-ioredis-yet'
+import { Cache } from 'cache-manager'
+import { RedisStore, redisStore } from 'cache-manager-ioredis-yet'
 import { LoggerModule } from 'nestjs-pino'
 import { Env } from './common.enum'
 import { IConfig, IConfigIoredis, IReq } from './common.interface'
@@ -68,4 +69,15 @@ import { IConfig, IConfigIoredis, IReq } from './common.interface'
     }),
   ],
 })
-export class CommonModule {}
+export class CommonModule implements OnModuleDestroy {
+  constructor(
+    private readonly config: ConfigService,
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
+  ) {}
+
+  onModuleDestroy() {
+    if (this.config.get<IConfigIoredis>('ioredis').enable) {
+      ;(this.cache.store as RedisStore).client.quit()
+    }
+  }
+}

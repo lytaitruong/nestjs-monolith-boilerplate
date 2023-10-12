@@ -55,12 +55,13 @@
 - [x] Setup Auth JWT
   - [x] Integration with Oauth2 Google
   - [x] Integration with Oauth2 Github
-  - [ ] Update database for Auth
+  - [x] Update database for Auth
 - [x] Setup Cache using Redis or Local LRU
 - [ ] Setup Docker
 - [ ] Setup Queue using Bull
 - [ ] Setup Upload file ([Aws S3](https://aws.amazon.com/s3/))
 - [ ] Setup Webhook ([Stripe](https://stripe.com/))
+- [ ] Flags Feature
 
 ## How to use
 

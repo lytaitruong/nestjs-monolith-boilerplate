@@ -12,16 +12,10 @@ export class UserProfileRes implements Partial<User> {
   email: string | null
 
   @IsSwaggerString({ required: false, nullable: true })
-  avatar: string | null
-
-  @IsSwaggerEnum($Enums.Role, { required: true })
-  role: $Enums.Role
+  image: string | null
 
   @IsSwaggerEnum($Enums.Gender, { required: false, nullable: true })
   gender: $Enums.Gender | null
-
-  @IsSwaggerEnum($Enums.Status, { required: false, nullable: true })
-  status: $Enums.Status | null
 
   @IsSwaggerDate()
   createdAt: Date
