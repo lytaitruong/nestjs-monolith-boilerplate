@@ -6,6 +6,7 @@ export * from './common.error'
 export * from './common.interface'
 export * from './common.module'
 
+export * from './base'
 export * from './document'
 export * from './middleware'
 export * from './pagination'

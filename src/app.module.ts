@@ -2,6 +2,7 @@ import { CommonModule, configuration } from '@/common'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { AuthModule } from './api/auth/auth.module'
+import { TaskModule } from './api/task/task.module'
 import { UserModule } from './api/user/user.module'
 import { AppController } from './app.controller'
 import { PrismaModule } from './modules/prisma'
@@ -19,6 +20,7 @@ import { PrismaModule } from './modules/prisma'
     PrismaModule,
     AuthModule,
     UserModule,
+    TaskModule,
   ],
   controllers: [AppController],
 })

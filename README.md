@@ -58,10 +58,14 @@
   - [x] Update database for Auth
 - [x] Setup Cache using Redis or Local LRU
 - [x] Setup Docker
+- [x] Setup Base CRUD follow DRY principles
 - [ ] Setup Queue using Bull
 - [ ] Setup Upload file ([Aws S3](https://aws.amazon.com/s3/))
 - [ ] Setup Webhook ([Stripe](https://stripe.com/))
 - [ ] Flags Feature
+- [ ] Multi tenant database
+- [ ] Github actions to ECS
+- [ ] Terraform
 
 ## How to use
 

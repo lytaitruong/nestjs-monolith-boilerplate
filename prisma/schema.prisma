@@ -40,8 +40,8 @@ model Auth {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   device       String   @db.VarChar(128)
   refreshToken String?  @map("refresh_token") @db.VarChar(255)
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamp
 
   @@id([userId, device])
   @@map("auth")
@@ -59,8 +59,30 @@ model User {
   gender    Gender   @default(OTHERS)
   role      Role     @default(USER)
   auth      Auth[]
+  tasks     Task[]
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
 
   @@map("users")
+}
+
+enum TaskStatus {
+  PENDING
+  CANCELED
+  COMPLETE
+}
+
+model Task {
+  id        String     @id @default(cuid()) @db.VarChar(28)
+  content   String     @db.Text()
+  hashtag   String[]
+  title     String     @db.VarChar(32)
+  status    TaskStatus @default(PENDING)
+  userId    String     @map("user_id") @db.VarChar(28)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp
+  updatedAt DateTime   @updatedAt @map("updated_at") @db.Timestamp
+
+  @@index([userId, status])
+  @@map("tasks")
 }
