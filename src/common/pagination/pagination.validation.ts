@@ -31,14 +31,14 @@ export const PaginationQueryDto = <T>(sortEnum: T[]) => {
   class PaginationQuery extends PaginationRangeDto implements IPaginationParams<T> {
     @ApiProperty({ type: 'string', required: false, description: 'Not Required', example: '{"name":"desc"}' })
     @IsOptional()
-    @Transform(({ value }: { value: string }) => value && JSON.parse(value))
     @IsSorted(sortEnum)
+    @Transform(({ value }: { value: string }) => value && JSON.parse(value))
     sort?: { [data in keyof T]: Sort }
 
     @ApiProperty({ type: 'string', required: false, description: 'Not Required', example: 'name.createdAt' })
     @IsOptional()
-    @Transform(({ value }: { value: string }) => value.toLowerCase().trim().split('.'))
     @IsSwaggerArrayString()
+    @Transform(({ value }: { value: string }) => value.toLowerCase().trim().split('.'))
     filter?: keyof T[]
 
     @ApiProperty({ type: 'string', required: false, description: 'Not Required', example: 'daniel' })

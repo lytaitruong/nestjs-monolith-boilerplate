@@ -20,9 +20,9 @@ export const Device = createParamDecorator((data: unknown, context: ExecutionCon
 // ! The order of guard is important, which will be execute first
 export const GuardController = (name: string, tags = name) => {
   return applyDecorators(
-    Controller(name),
-    ApiTags(tags),
     ApiBearerAuth(),
+    ApiTags(tags),
+    Controller(name),
     UseGuards(JwtAccessGuard, RoleGuard),
     ApiFailedRes(
       GUARD_ERROR.ACCESS_TOKEN_REQUIRE,

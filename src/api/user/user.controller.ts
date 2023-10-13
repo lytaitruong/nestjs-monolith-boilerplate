@@ -11,8 +11,8 @@ export class UserController {
 
   constructor(private readonly service: UserService) {}
 
-  @ApiPassedRes(UserProfileRes)
   @Get('profile')
+  @ApiPassedRes(UserProfileRes)
   getProfile(@Req() req: IReq<JwtInfo>) {
     return this.service.getProfile(req.user)
   }

@@ -18,8 +18,8 @@ export abstract class GuardController {
   ) {}
 
   @UseGuards(JwtAccessGuard)
-  @HttpCode(HttpStatus.NO_CONTENT)
   @Post('sign-out')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async signOut(@Req() req: IReq<JwtInfo>, @Res() res: IRes) {
     const maxAgeRevoke = -1
     await this.service.signOut(req.user)
@@ -27,9 +27,8 @@ export abstract class GuardController {
   }
 
   @UseGuards(JwtRefreshGuard)
-  @HttpCode(HttpStatus.OK)
-  @ApiPassedRes(GuardRefreshRes, HttpStatus.OK)
   @Post('refresh-token')
+  @ApiPassedRes(GuardRefreshRes, HttpStatus.OK)
   async refreshToken(@Req() req: IReq<JwtInfo>, @Res() res: IRes) {
     const maxAgeRefresh = req.user.exp - ((Date.now() / 1000) | 0)
     const token =
@@ -46,9 +45,8 @@ export abstract class GuardController {
   async googleAuth() {}
 
   @UseGuards(GoogleOauth2Guard)
-  @HttpCode(HttpStatus.OK)
-  @ApiPassedRes(GuardOauth2Res, HttpStatus.OK)
   @Get('google-redirect')
+  @ApiPassedRes(GuardOauth2Res, HttpStatus.OK)
   async googleRedirect(@Req() req: IReqOauth2, @Device() device: IDevice, @Res() res: IRes) {
     if (!req.state) throw new AppException(GUARD_ERROR.OAUTH2_STATE_INVALID)
 
@@ -61,9 +59,8 @@ export abstract class GuardController {
   async githubAuth() {}
 
   @UseGuards(GithubOauth2Guard)
-  @HttpCode(HttpStatus.OK)
-  @ApiPassedRes(GuardOauth2Res, HttpStatus.OK)
   @Get('github-redirect')
+  @ApiPassedRes(GuardOauth2Res, HttpStatus.OK)
   async githubRedirect(@Req() req: IReqOauth2, @Device() device: IDevice, @Res() res: IRes) {
     if (!req.state) throw new AppException(GUARD_ERROR.OAUTH2_STATE_INVALID)
 
