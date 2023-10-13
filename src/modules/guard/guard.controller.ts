@@ -1,11 +1,11 @@
-import { ApiPassedRes, AppException, HEADERS, IRes } from '@/common'
+import { ApiPassedRes, AppException, HEADERS, IReq, IRes } from '@/common'
 import { Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { IDevice } from 'ua-parser-js'
 import { Device } from './guard.decorator'
 import { GuardCookieRes, GuardOauth2Res, GuardRefreshRes } from './guard.dto'
 import { GUARD_ERROR } from './guard.exception'
-import { GuardCookie, GuardType, IGuardService, IReqJwt, IReqOauth2 } from './guard.interface'
+import { GuardCookie, GuardType, IGuardService, IReqOauth2, JwtInfo } from './guard.interface'
 import { GithubOauth2Guard } from './oauth/github.guard'
 import { GoogleOauth2Guard } from './oauth/google.guard'
 import { JwtAccessGuard } from './strategies/access.guard'
@@ -20,7 +20,7 @@ export abstract class GuardController {
   @UseGuards(JwtAccessGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Post('sign-out')
-  async signOut(@Req() req: IReqJwt, @Res() res: IRes) {
+  async signOut(@Req() req: IReq<JwtInfo>, @Res() res: IRes) {
     const maxAgeRevoke = -1
     await this.service.signOut(req.user)
     return this.setCookie(res, { accessToken: '', refreshToken: '' }, maxAgeRevoke, maxAgeRevoke).send()
@@ -30,7 +30,7 @@ export abstract class GuardController {
   @HttpCode(HttpStatus.OK)
   @ApiPassedRes(GuardRefreshRes, HttpStatus.OK)
   @Post('refresh-token')
-  async refreshToken(@Req() req: IReqJwt, @Res() res: IRes) {
+  async refreshToken(@Req() req: IReq<JwtInfo>, @Res() res: IRes) {
     const maxAgeRefresh = req.user.exp - ((Date.now() / 1000) | 0)
     const token =
       // If a web

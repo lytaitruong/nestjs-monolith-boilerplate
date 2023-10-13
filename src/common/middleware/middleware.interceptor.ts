@@ -12,7 +12,7 @@ export class HttpInterceptor<T> implements NestInterceptor<T> {
       .handle()
       .pipe(
         map((data: T | PaginatedResult<T>) =>
-          typeof data === 'object' && (data as PaginatedResult<T>).meta
+          typeof data === 'object' && (data as PaginatedResult<T>)?.meta
             ? this.formatPagination(data as PaginatedResult<T>)
             : (data as T),
         ),

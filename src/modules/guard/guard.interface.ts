@@ -53,8 +53,6 @@ export type JwtInfo = Omit<JwtPayload, 'sub'> & {
   exp?: number
 }
 
-export type IReqJwt = IReq & { user: JwtInfo }
-
 export interface Oauth2Info {
   name: string
   email: string
@@ -67,7 +65,7 @@ export interface Oauth2Info {
     refreshToken: string
   }
 }
-export type IReqOauth2 = IReq & { user: Oauth2Info; state: boolean }
+export type IReqOauth2 = IReq<Oauth2Info> & { state: boolean }
 
 export interface IGuardService {
   signOut(info: JwtInfo): Promise<void>

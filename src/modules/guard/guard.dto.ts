@@ -1,15 +1,15 @@
 import { IsSwaggerString } from '@/common'
 
 export class GuardCookieRes {
-  @IsSwaggerString()
+  @IsSwaggerString({ required: true })
   accessToken: string
 
-  @IsSwaggerString()
+  @IsSwaggerString({ required: true })
   refreshToken: string
 }
 
 export class GuardRefreshRes extends GuardCookieRes {
-  @IsSwaggerString()
+  @IsSwaggerString({ required: true })
   type: string
 }
 

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
 import { IsBoolean, IsOptional, IsString, ValidateIf } from 'class-validator'
+import { IsSwaggerArrayString } from '../document'
 import { ApiPaginateLimit, IsLargeThan, IsSorted } from './pagination.decorator'
 import { IPaginationParams, PAGINATION, Sort } from './pagination.interface'
 
@@ -28,25 +29,25 @@ export class PaginationRangeDto extends PaginationOptionsDto {
 
 export const PaginationQueryDto = <T>(sortEnum: T[]) => {
   class PaginationQuery extends PaginationRangeDto implements IPaginationParams<T> {
-    @ApiProperty({ type: 'string', required: false, description: 'Not Required' })
+    @ApiProperty({ type: 'string', required: false, description: 'Not Required', example: '{"name":"desc"}' })
     @IsOptional()
     @Transform(({ value }: { value: string }) => value && JSON.parse(value))
     @IsSorted(sortEnum)
     sort?: { [data in keyof T]: Sort }
 
-    @ApiProperty({ type: 'string', required: false, description: 'Not Required' })
+    @ApiProperty({ type: 'string', required: false, description: 'Not Required', example: 'name.createdAt' })
     @IsOptional()
-    @IsString()
     @Transform(({ value }: { value: string }) => value.toLowerCase().trim().split('.'))
+    @IsSwaggerArrayString()
     filter?: keyof T[]
 
-    @ApiProperty({ type: 'string', required: false, description: 'Not Required' })
+    @ApiProperty({ type: 'string', required: false, description: 'Not Required', example: 'daniel' })
     @IsOptional()
     @IsString()
     @Transform(({ value }: { value: string }) => value && value.toLowerCase().trim())
     search?: string
 
-    @ApiProperty({ type: 'string', required: false, description: 'Not Required' })
+    @ApiProperty({ type: 'string', required: false, description: 'Not Required', example: 'true' })
     @IsOptional()
     @IsBoolean()
     @Transform(({ value }: { value: string }) => value && value === 'true')

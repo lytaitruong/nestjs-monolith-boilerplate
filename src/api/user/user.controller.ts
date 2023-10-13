@@ -1,6 +1,6 @@
 import { Route } from '@/app.constant'
-import { ApiPassedRes } from '@/common'
-import { GuardController, IReqJwt } from '@/modules/guard'
+import { ApiPassedRes, IReq } from '@/common'
+import { GuardController, JwtInfo } from '@/modules/guard'
 import { Get, Logger, Req } from '@nestjs/common'
 import { UserProfileRes } from './user.res'
 import { UserService } from './user.service'
@@ -13,7 +13,7 @@ export class UserController {
 
   @ApiPassedRes(UserProfileRes)
   @Get('profile')
-  getProfile(@Req() req: IReqJwt) {
+  getProfile(@Req() req: IReq<JwtInfo>) {
     return this.service.getProfile(req.user)
   }
 }
