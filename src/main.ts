@@ -12,6 +12,7 @@ import { AppModule } from './app.module'
 import { CORS, Env, IConfigApp, IConfigCookie, IConfigSwagger, IReq, setupSwagger } from './common'
 import { genReqId, helmetSetting, uploadSetting } from './common/common.config'
 import { HttpExceptionFilter, HttpInterceptor } from './common/middleware'
+import { PrismaClientExceptionFilter } from './modules/prisma'
 
 async function bootstrap() {
   const adapter = new FastifyAdapter({ logger: false, genReqId })
@@ -43,7 +44,7 @@ async function bootstrap() {
   // GLOBAL MIDDLEWARE
   app.useLogger(logger)
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }))
-  app.useGlobalFilters(new HttpExceptionFilter())
+  app.useGlobalFilters(new PrismaClientExceptionFilter(), new HttpExceptionFilter())
   app.useGlobalInterceptors(new HttpInterceptor())
   // SWAGGER
   if (config.get('env') !== Env.PRODUCTION) {

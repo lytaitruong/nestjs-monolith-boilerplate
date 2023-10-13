@@ -14,7 +14,7 @@ export const BaseController = <R, C, U, P, Q, T = any>(
   query: Type<Q>,
 ) => {
   const createPipe = new AbstractValidationPipe({ whitelist: true, transform: true }, { body: create })
-  const updatePipe = new AbstractValidationPipe({ whitelist: true, transform: true }, { body: create })
+  const updatePipe = new AbstractValidationPipe({ whitelist: true, transform: true }, { body: update })
   const queryPipe = new AbstractValidationPipe({ whitelist: true, transform: true }, { query })
   const paramPipe = new AbstractValidationPipe({ whitelist: true, transform: true }, { param: param })
   const shortPipe = new AbstractValidationPipe(
