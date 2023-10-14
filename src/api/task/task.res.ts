@@ -1,17 +1,17 @@
-import { IsSwaggerArrayString, IsSwaggerDate, IsSwaggerEnum, IsSwaggerString } from '@/common'
+import { IsSwaggerDate, IsSwaggerEnum, IsSwaggerString } from '@/common'
 import { Task, TaskStatus } from '@prisma/client'
 
 export class TaskResultDto implements Partial<Task> {
-  @IsSwaggerString({ required: true })
+  @IsSwaggerString()
   id: string
 
-  @IsSwaggerString({ required: true })
+  @IsSwaggerString()
   title: string
 
-  @IsSwaggerString({ required: true })
+  @IsSwaggerString()
   content: string
 
-  @IsSwaggerArrayString({ required: false })
+  @IsSwaggerString({ required: false, isArray: true })
   hashtag?: string[]
 
   @IsSwaggerEnum(TaskStatus, { required: false })

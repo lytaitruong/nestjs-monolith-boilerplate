@@ -2,7 +2,7 @@ import { IsSwaggerDate, IsSwaggerEnum, IsSwaggerString } from '@/common'
 import { Gender, User } from '@prisma/client'
 
 export class UserProfileRes implements Partial<User> {
-  @IsSwaggerString({ required: true })
+  @IsSwaggerString()
   id: string
 
   @IsSwaggerString({ required: false, nullable: true })

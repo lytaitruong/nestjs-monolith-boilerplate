@@ -13,14 +13,17 @@ import {
 import { isArray } from 'lodash'
 import { UploadInterceptor } from './upload.interceptor'
 
-export function UploadFormData() {
+type ApiOptions = ApiPropertyOptions
+
+export const UploadFormData = () => {
   return applyDecorators(UseInterceptors(UploadInterceptor), ApiConsumes('multipart/form-data'))
 }
 
-export function IsSwaggerFile(options: ApiPropertyOptions = { required: true }) {
+export const IsSwaggerFile = (options: ApiOptions = { required: true }, mimeType?: string[]) => {
   return applyDecorators(
     ApiProperty({ ...options, type: 'string', format: 'binary' }),
     options.required ? IsDefined() : IsOptional(),
+    ...(mimeType ? [IsContainMimeType(mimeType)] : []),
     ...(options.required && options.minItems ? [ArrayMinSize(options.minItems)] : []),
     ...(options.required && options.maxItems ? [ArrayMaxSize(options.maxItems)] : []),
   )

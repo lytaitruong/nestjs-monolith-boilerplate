@@ -10,6 +10,7 @@ import {
   IsDefined,
   IsEnum,
   IsNumber,
+  IsNumberOptions,
   IsNumberString,
   IsOptional,
   IsString,
@@ -20,199 +21,74 @@ import {
   ValidateNested,
 } from 'class-validator'
 
-export function IsSwaggerString(options: ApiPropertyOptions = {}) {
+type ApiOptions = ApiPropertyOptions
+
+export const IsSwaggerString = (options: ApiOptions = { required: true }) => {
   return applyDecorators(
-    ApiProperty({
-      type: 'string',
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
+    ApiProperty({ ...options, type: 'string' }),
     options.required ? IsDefined() : IsOptional(),
-    IsString(),
+    IsString(options.isArray ? { each: true } : {}),
     ...(options.maxLength ? [MaxLength(options.maxLength)] : []),
     ...(options.minLength ? [MinLength(options.minLength)] : []),
+    ...(options.required && options.isArray && options.maxItems ? [ArrayMaxSize(options.maxItems)] : []),
+    ...(options.required && options.isArray && options.minItems ? [ArrayMinSize(options.minItems)] : []),
   )
 }
 
-export function IsSwaggerArrayString(options: ApiPropertyOptions = {}) {
+export const IsSwaggerStringNumber = (options: ApiOptions = { required: true }) => {
   return applyDecorators(
-    ApiProperty({
-      isArray: true,
-      type: 'string',
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
+    ApiProperty({ ...options, type: 'string' }),
     options.required ? IsDefined() : IsOptional(),
-    IsString({ each: true }),
+    IsNumberString({}, options.isArray ? { each: true } : {}),
     ...(options.maxLength ? [MaxLength(options.maxLength)] : []),
     ...(options.minLength ? [MinLength(options.minLength)] : []),
-    ...(options.maxItems ? [ArrayMaxSize(options.maxItems)] : []),
-    ...(options.minItems ? [ArrayMinSize(options.minItems)] : []),
+    ...(options.required && options.isArray && options.maxItems ? [ArrayMaxSize(options.maxItems)] : []),
+    ...(options.required && options.isArray && options.minItems ? [ArrayMinSize(options.minItems)] : []),
   )
 }
 
-export function IsSwaggerStringNumber(options: ApiPropertyOptions = {}) {
+export const IsSwaggerNumber = (options: ApiOptions = { required: true }, config: IsNumberOptions = {}) => {
   return applyDecorators(
-    ApiProperty({
-      type: 'string',
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
+    ApiProperty({ ...options, type: 'number' }),
     options.required ? IsDefined() : IsOptional(),
-    IsNumberString(),
-    ...(options.maxLength ? [MaxLength(options.maxLength)] : []),
-    ...(options.minLength ? [MinLength(options.minLength)] : []),
-  )
-}
-
-export function IsSwaggerArrayStringNumber(options: ApiPropertyOptions = {}) {
-  return applyDecorators(
-    ApiProperty({
-      type: 'string',
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
-    options.required ? IsDefined() : IsOptional(),
-    IsNumberString({}, { each: true }),
-    ...(options.maxLength ? [MaxLength(options.maxLength)] : []),
-    ...(options.minLength ? [MinLength(options.minLength)] : []),
-    ...(options.maxItems ? [ArrayMaxSize(options.maxItems)] : []),
-    ...(options.minItems ? [ArrayMinSize(options.minItems)] : []),
-  )
-}
-
-export function IsSwaggerNumber(options: ApiPropertyOptions = {}) {
-  return applyDecorators(
-    ApiProperty({
-      type: 'number',
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
-    options.required ? IsDefined() : IsOptional(),
-    IsNumber(),
+    IsNumber(config, options.isArray ? { each: true } : {}),
     ...(options.minimum ? [Min(options.minimum)] : []),
     ...(options.maximum ? [Max(options.maximum)] : []),
+    ...(options.required && options.isArray && options.maxItems ? [ArrayMaxSize(options.maxItems)] : []),
+    ...(options.required && options.isArray && options.minItems ? [ArrayMinSize(options.minItems)] : []),
   )
 }
 
-export function IsSwaggerArrayNumber(options: ApiPropertyOptions = {}) {
+export const IsSwaggerBoolean = (options: ApiOptions = { required: true }) => {
   return applyDecorators(
-    ApiProperty({
-      type: 'number',
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
+    ApiProperty({ ...options, type: 'boolean' }),
     options.required ? IsDefined() : IsOptional(),
-    IsNumber({}, { each: true }),
-    ...(options.minimum ? [Min(options.minimum)] : []),
-    ...(options.maximum ? [Max(options.maximum)] : []),
-    ...(options.maxItems ? [ArrayMaxSize(options.maxItems)] : []),
-    ...(options.minItems ? [ArrayMinSize(options.minItems)] : []),
+    IsBoolean(options.isArray ? { each: true } : {}),
   )
 }
 
-export function IsSwaggerBoolean(options: ApiPropertyOptions = {}) {
+export const IsSwaggerDate = (options: ApiOptions = { required: true }) => {
   return applyDecorators(
-    ApiProperty({
-      type: 'boolean',
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
-    options.required ? IsDefined() : IsOptional(),
-    IsBoolean(),
-  )
-}
-
-export function IsSwaggerArrayBoolean(options: ApiPropertyOptions = {}) {
-  return applyDecorators(
-    ApiProperty({
-      type: 'boolean',
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
-    options.required ? IsDefined() : IsOptional(),
-    IsBoolean({ each: true }),
-  )
-}
-
-export function IsSwaggerDate(options: ApiPropertyOptions = {}) {
-  return applyDecorators(
-    ApiProperty({
-      type: 'date',
-      default: new Date(),
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
-    options.required ? IsDefined() : IsOptional(),
-    Transform(({ value }: { value: string }) => value && new Date(value)),
-    IsDate(),
-  )
-}
-
-export function IsSwaggerArrayDate(options: ApiPropertyOptions = {}) {
-  return applyDecorators(
-    ApiProperty({
-      type: 'date',
-      default: new Date(),
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
+    ApiProperty({ ...options, type: 'date', default: new Date() }),
     options.required ? IsDefined() : IsOptional(),
     Transform(({ value }) => value && new Date(value)),
-    IsDate({ each: true }),
+    IsDate(options.isArray ? { each: true } : {}),
   )
 }
 
-export function IsSwaggerEnum(enumData: Record<string, string | number | boolean>, options: ApiPropertyOptions = {}) {
+export const IsSwaggerEnum = <T extends object>(enumData: T, options: ApiOptions = { required: true }) => {
   return applyDecorators(
-    ApiProperty({
-      type: 'enum',
-      enum: enumData,
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
+    ApiProperty({ ...options, type: 'enum', enum: enumData }),
     options.required ? IsDefined() : IsOptional(),
-    IsEnum(enumData),
+    IsEnum(enumData, options.isArray ? { each: true } : {}),
   )
 }
 
-export function IsSwaggerArrayEnum(
-  enumData: Record<string, string | number | boolean>,
-  options: ApiPropertyOptions = {},
-) {
+export const IsSwaggerObject = <T>(typeClass: TypeClass<T>, options: ApiOptions = { required: true }) => {
   return applyDecorators(
-    ApiProperty({
-      type: 'enum',
-      enum: enumData,
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
+    ApiProperty({ ...options, type: typeClass }),
     options.required ? IsDefined() : IsOptional(),
-    IsEnum(enumData, { each: true }),
-  )
-}
-
-export function IsSwaggerObject<T>(typeClass: TypeClass<T>, options: ApiPropertyOptions = {}) {
-  return applyDecorators(
-    ApiProperty({
-      type: typeClass,
-      ...options,
-    }),
-    options.required ? IsDefined() : IsOptional(),
-    ValidateNested(),
-    Type(() => typeClass),
-  )
-}
-
-export function IsSwaggerArray<T>(typeClass: TypeClass<T>, options: ApiPropertyOptions = {}) {
-  return applyDecorators(
-    ApiProperty({
-      isArray: true,
-      type: typeClass,
-      description: options.required ? 'required' : 'not required',
-      ...options,
-    }),
-    ValidateNested({ each: true }),
+    ValidateNested(options.isArray ? { each: true } : {}),
     Type(() => typeClass),
     ...(options.required ? [ArrayNotEmpty()] : []),
     ...(options.required && options.minItems ? [ArrayMinSize(options.minItems)] : []),

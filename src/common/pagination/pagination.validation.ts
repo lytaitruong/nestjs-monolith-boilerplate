@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
 import { IsBoolean, IsOptional, IsString, ValidateIf } from 'class-validator'
-import { IsSwaggerArrayString } from '../document'
 import { ApiPaginateLimit, IsLargeThan, IsSorted } from './pagination.decorator'
 import { IPaginationParams, PAGINATION, Sort } from './pagination.interface'
 
@@ -37,7 +36,7 @@ export const PaginationQueryDto = <T>(sortEnum: T[]) => {
 
     @ApiProperty({ type: 'string', required: false, description: 'Not Required', example: 'name.createdAt' })
     @IsOptional()
-    @IsSwaggerArrayString()
+    @IsString({ each: true })
     @Transform(({ value }: { value: string }) => value.toLowerCase().trim().split('.'))
     filter?: keyof T[]
 

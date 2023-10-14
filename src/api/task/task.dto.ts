@@ -1,22 +1,22 @@
-import { IsSwaggerArrayString, IsSwaggerEnum, IsSwaggerString, PaginationQueryDto } from '@/common'
+import { IsSwaggerEnum, IsSwaggerString, PaginationQueryDto } from '@/common'
 import { PartialType } from '@nestjs/swagger'
 import { Prisma, TaskStatus } from '@prisma/client'
 
 export class TaskQueryDto extends PaginationQueryDto(Object.values(Prisma.TaskScalarFieldEnum)) {}
 
 export class TaskParamDto {
-  @IsSwaggerString({ required: true })
+  @IsSwaggerString()
   id: string
 }
 
 export class TaskCreateDto implements Omit<Prisma.TaskCreateInput, 'user'> {
-  @IsSwaggerString({ required: true })
+  @IsSwaggerString()
   title: string
 
-  @IsSwaggerString({ required: true })
+  @IsSwaggerString()
   content: string
 
-  @IsSwaggerArrayString()
+  @IsSwaggerString({ required: true, isArray: true })
   hashtag: string[]
 }
 
