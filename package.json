@@ -69,6 +69,7 @@
     "fastify": "^4.23.2",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
+    "nestjs-i18n": "^10.3.6",
     "nestjs-pino": "^3.5.0",
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",

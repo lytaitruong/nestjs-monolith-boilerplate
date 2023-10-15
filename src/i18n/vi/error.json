@@ -1,0 +1,23 @@
+{
+  "0900": "Tải dữ liệu từ s3 đã thất bại",
+  "0901": "Đẩy dữ liệu lên s3 đã thất bại",
+  "0902": "Xoá dữ liệu trong s3 đã thất bại",
+  "1000": "Bạn không có quyền để truy cập những tài nguyên này",
+  "1001": "Mã thông báo truy cập được yêu cầu trên header",
+  "1002": "Mã thông báo truy cập của bạn đã hết hạn",
+  "1003": "Mã thông báo truy cập của bạn không hợp lệ",
+  "1004": "Mã thông báo truy cập đã xác nhận trước thời gian có hiệu lực",
+  "1005": "Mã thông báo làm mới được yêu cầu trên header",
+  "1006": "Mã thông báo làm mới của bạn đã hết hạn",
+  "1007": "Mã thông báo làm mới của bạn không hợp lệ",
+  "1008": "Mã thông báo làm mới đã xác nhận trước thời gian có hiệu lực",
+  "1009": "Mã code và trạng thái Google của bạn không hợp lệ",
+  "1010": "Mã code và trạng thái Github của bạn không hợp lệ",
+  "1011": "Trạng thái Oauth2 của bạn đã hết hạn hoặc không hợp lệ để ngăn chặn cuộc tấn công CSRF",
+  "2000": "Email này đã được đăng ký",
+  "2001": "Phone này đã được đăng ký",
+  "2002": "Tài khoản của bạn đã bị vô hiệu hóa từ quản trị viên! Vui lòng liên hệ với quản trị viên",
+  "2003": "Thiết bị này không tồn tại",
+  "2004": "Mã thông báo làm mới này đã bị thu hồi!",
+  "3001": "Điện thoại này đã được sử dụng bởi người khác"
+}

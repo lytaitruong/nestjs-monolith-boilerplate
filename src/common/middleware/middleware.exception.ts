@@ -1,5 +1,7 @@
+import { I18nTranslations } from '@/generated/i18n.generated'
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common'
 import { isArray } from 'lodash'
+import { I18nContext } from 'nestjs-i18n'
 import { AppException, ErrorType, IError } from '../common.error'
 import { IRes } from '../common.interface'
 
@@ -15,6 +17,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
       exception instanceof AppException
         ? exception.getResponse()
         : this.formatError(exception['response']['message'], exception.message)
+
+    //! i18n translation error message
+    const i18n = I18nContext.current<I18nTranslations>(host)
+    if (exception instanceof AppException && i18n.lang !== 'en') {
+      const message = i18n.t(`error.${error.code as keyof I18nTranslations['error']}`)
+      if (message) error.message = message
+    }
+
     this.logger.error({ error }, exception.stack)
     return res.code(exception.getStatus() || HttpStatus.INTERNAL_SERVER_ERROR).send(error)
   }

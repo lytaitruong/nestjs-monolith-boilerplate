@@ -62,7 +62,7 @@
 - [ ] Setup Queue using Bull
 - [x] Setup Upload file ([Aws S3](https://aws.amazon.com/s3/))
 - [ ] Setup Webhook ([Stripe](https://stripe.com/))
-- [ ] Setup i18 localize
+- [x] Setup i18 localize
 - [ ] Flags Feature
 - [ ] Multi tenant database
 - [ ] Github actions to ECS

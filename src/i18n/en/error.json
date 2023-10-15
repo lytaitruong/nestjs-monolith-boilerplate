@@ -1,0 +1,23 @@
+{
+  "0900": "Download from s3 has been failed",
+  "0901": "Upload to s3 has been failed",
+  "0902": "Delete file & folder in s3 has bene failed",
+  "1000": "Your don't have enough permission to access this resource",
+  "1001": "Require access token in header",
+  "1002": "Your access token has been expired",
+  "1003": "Your access token has been invalid",
+  "1004": "Your access token has been claims before create",
+  "1005": "Require refresh token in header",
+  "1006": "Your refresh token has been expired",
+  "1007": "Your refresh token has been invalid",
+  "1008": "Your Refresh token has been claims before create",
+  "1009": "Your google code & state has been invalid",
+  "1010": "Your github code & state has been invalid",
+  "1011": "Your oauth2 state has been expired or invalid to prevent attack CSRF",
+  "2000": "This email has already been registered",
+  "2001": "This phone has already been registered",
+  "2002": "Your account has been deactivate from admin! Please contact to admin.",
+  "2003": "This device doesn't exist.",
+  "2004": "This refresh token has been revoke!",
+  "3001": "This phone has been used by another"
+}
