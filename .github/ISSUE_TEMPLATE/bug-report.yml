@@ -1,0 +1,59 @@
+name: "\U0001F41B Bug report"
+description: "If something isn't working as expected \U0001F914"
+labels: ['needs triage']
+body:
+  - type: checkboxes
+    attributes:
+      label: 'Is there an existing issue for this?'
+      description: 'Please search [here](../issues?q=is%3Aissue) to see if an issue already exists for the bug you encountered'
+      options:
+        - label: 'I have searched the existing issues'
+          required: true
+
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: 'Current behavior'
+      description: 'How the issue manifests?'
+
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: 'Minimum project github repo to reproduce'
+      placeholder: 'https://github.com/...'
+
+  - type: textarea
+    attributes:
+      label: 'Steps to reproduce'
+      description: |
+        How the issue manifests?
+        You could leave this blank if you alread write this in your reproduction code
+      placeholder: |
+        1. `npm ci`
+        2. `npm start:dev`
+        3. See error...
+
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: 'Expected behavior'
+      description: 'A clear and concise description of what you expected to happened (or code)'
+
+  - type: checkboxes
+    attributes:
+      label: 'In which operating systems have you tested?'
+      options:
+        - label: macOS
+        - label: Windows
+        - label: Linux
+
+  - type: checkboxes
+    attributes:
+      label: 'In which cloud you hosted ?'
+      options:
+        - label: AWS
+        - label: Azure
+        - label: Google
