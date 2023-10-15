@@ -17,10 +17,10 @@ export const ApiSchemaRes = (schema: IAppError): Type<IError> => {
     @ApiProperty({ name: 'code', type: 'string', default: schema.code })
     code: string
 
-    @ApiProperty({ name: 'code', type: 'string', default: schema.message })
+    @ApiProperty({ name: 'message', type: 'string', default: schema.message })
     message: string
   }
-  Object.defineProperty(SchemaResponse, 'name', { writable: true, value: schema.name })
+  Object.defineProperty(SchemaResponse, 'name', { writable: true, value: schema.code })
   return SchemaResponse
 }
 
@@ -31,7 +31,7 @@ export const ApiFailedRes = (...schemas: IAppError[]) => {
       content: {
         'application/json': {
           examples: schemas.reduce((list, schema) => {
-            list[schema.name] = { value: schema }
+            list[schema.code] = { value: schema }
             return list
           }, {}),
         },
