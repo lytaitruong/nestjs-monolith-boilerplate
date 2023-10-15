@@ -1,7 +1,8 @@
 import { Route } from '@/app.constant'
-import { ApiPassedRes, IReq } from '@/common'
+import { ApiPassedRes, IReq, UploadFormData } from '@/common'
 import { GuardController, JwtInfo } from '@/modules/guard'
-import { Get, Logger, Req } from '@nestjs/common'
+import { Body, Get, Logger, Patch, Req } from '@nestjs/common'
+import { UserUpdateDto } from './user.dto'
 import { UserProfileRes } from './user.res'
 import { UserService } from './user.service'
 
@@ -13,7 +14,14 @@ export class UserController {
 
   @Get('profile')
   @ApiPassedRes(UserProfileRes)
-  getProfile(@Req() req: IReq<JwtInfo>) {
-    return this.service.getProfile(req.user)
+  getOne(@Req() req: IReq<JwtInfo>) {
+    return this.service.getOne(req.user)
+  }
+
+  @UploadFormData()
+  @Patch('profile')
+  @ApiPassedRes(UserProfileRes)
+  updateProfile(@Req() req: IReq<JwtInfo>, @Body() data: UserUpdateDto) {
+    return this.service.update(req.user, data)
   }
 }

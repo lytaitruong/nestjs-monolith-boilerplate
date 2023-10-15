@@ -60,12 +60,20 @@
 - [x] Setup Docker
 - [x] Setup Base CRUD follow DRY principles
 - [ ] Setup Queue using Bull
-- [ ] Setup Upload file ([Aws S3](https://aws.amazon.com/s3/))
+- [x] Setup Upload file ([Aws S3](https://aws.amazon.com/s3/))
 - [ ] Setup Webhook ([Stripe](https://stripe.com/))
+- [ ] Setup i18 localize
 - [ ] Flags Feature
 - [ ] Multi tenant database
 - [ ] Github actions to ECS
 - [ ] Terraform
+- [ ] Build documentation for everyone can fork
+- [ ] Setup Loki + Promtail to logs
+- [ ] Setup Prometheus for metrics
+- [ ] Setup Grafana for monitoring
+- [ ] Setup Tempo for Tracing
+- [ ] Worker Threads
+
 
 ## How to use
 

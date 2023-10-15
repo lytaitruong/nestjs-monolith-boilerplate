@@ -1,5 +1,5 @@
-import { Pag, Res } from '@/common'
-import { IBaseService } from '@/common/base'
+import { Res } from '@/common'
+import { IBaseService, Str } from '@/common/base'
 import { JwtInfo } from '@/modules/guard'
 import { PrismaService } from '@/modules/prisma'
 import { Injectable, Logger } from '@nestjs/common'
@@ -20,7 +20,7 @@ export class TaskService
     private readonly config: ConfigService,
     private readonly prisma: PrismaService,
   ) {}
-  async getAll(info: JwtInfo, _param: TaskParamDto, query: TaskQueryDto): Promise<Pag<TaskResultDto>> {
+  async getAll(info: JwtInfo, _param: TaskParamDto, query: TaskQueryDto): Promise<Str<TaskResultDto>> {
     const result = await this.paginate<Task, Prisma.TaskFindManyArgs>(
       this.prisma.task,
       {

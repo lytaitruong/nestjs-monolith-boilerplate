@@ -1,6 +1,7 @@
-import { Body, Delete, Get, Param, Post, Put, Query, Req, Type } from '@nestjs/common'
+import { Body, Delete, Get, Param, Post, Put, Query, Req, Res, Type } from '@nestjs/common'
 import { ApiBody, ApiParam, ApiQuery, OmitType } from '@nestjs/swagger'
-import { IReq } from '../common.interface'
+import { HEADERS } from '../common.constant'
+import { IReq, IRes } from '../common.interface'
 import { ApiPassedRes } from '../document'
 import { ApiPaginateRes } from '../pagination'
 import { IBaseService } from './base.interface'
@@ -28,8 +29,19 @@ export const BaseController = <R, C, U, P, Q, T = any>(
     @Get()
     @ApiPaginateRes(result)
     @ApiQuery({ type: query })
-    async getAll(@Req() req: IReq<T>, @Param(shortPipe) param: P, @Query(queryPipe) query: Q, ...others: []) {
-      return this.service.getAll(req.user, param, query, ...others)
+    async getAll(
+      @Req() req: IReq<T>,
+      @Param(shortPipe) param: P,
+      @Query(queryPipe) query: Q,
+      @Res() res: IRes,
+      ...others: []
+    ) {
+      const result = await this.service.getAll(req.user, param, query, ...others)
+      if (!query['export']) return result
+
+      return res
+        .header(HEADERS.CONTENT_DISPOSITION, `attachment; filename=${query['filename'] || result['name']}`)
+        .send(result['data'])
     }
 
     @Post()
