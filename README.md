@@ -61,6 +61,10 @@
 - [x] Setup Base CRUD follow DRY principles
 - [ ] Setup Queue using Bull
 - [x] Setup Upload file ([Aws S3](https://aws.amazon.com/s3/))
+- [x] Setup Content delivery network ([Aws Cloudfront](https://aws.amazon.com/cloudfront/))
+  - [x] Setup Policies access
+  - [x] Setup Presigned URL to restrict unauthorized access
+  - [x] Setup Presigned Cookies to authorize users to access resources
 - [ ] Setup Webhook ([Stripe](https://stripe.com/))
 - [x] Setup i18 localize
 - [ ] Flags Feature

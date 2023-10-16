@@ -5,6 +5,7 @@ import { S3Service } from '@/modules/s3'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { User } from '@prisma/client'
+import * as dayjs from 'dayjs'
 import { UserUpdateDto } from './user.dto'
 import { USER_ERROR } from './user.exception'
 
@@ -22,6 +23,7 @@ export class UserService {
       where: { id: info.sub },
       select: { id: true, email: true, image: true, state: true, gender: true, createdAt: true },
     })
+    user.image = this.s3.getSignURL('public', user.image, dayjs().endOf('day').toDate())
 
     return user
   }
@@ -47,6 +49,7 @@ export class UserService {
       },
       select: { id: true, email: true, image: true, state: true, gender: true, createdAt: true },
     })
+    user.image = this.s3.getSignURL('public', user.image, dayjs().endOf('day').toDate())
     return user
   }
 }

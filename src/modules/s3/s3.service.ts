@@ -10,10 +10,12 @@ import {
   S3Client,
   Tag,
 } from '@aws-sdk/client-s3'
+import { getSignedCookies, getSignedUrl } from '@aws-sdk/cloudfront-signer'
 import { Upload } from '@aws-sdk/lib-storage'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { S3_ERROR } from './s3.exception'
+import { Bucket } from './s3.interface'
 
 @Injectable()
 export class S3Service {
@@ -28,11 +30,19 @@ export class S3Service {
       },
     })
   }
-  get bucketPublic() {
-    return this.config.get('s3.bucketPublic')
+  get bucketPublic(): string {
+    return this.config.get('s3.bucketPublic.name')
   }
-  get bucketSecret() {
-    return this.config.get('s3.bucketSecret')
+  get bucketSecret(): string {
+    return this.config.get('s3.bucketPublic.name')
+  }
+
+  get cloudfrontPublic(): string {
+    return this.config.get('s3.bucketPublic.cloudfrontUrl')
+  }
+
+  get cloudfrontSecret(): string {
+    return this.config.get('s3.bucketSecret.cloudfrontUrl')
   }
 
   async upload(params: PutObjectCommandInput, tags: Tag[] = []): Promise<CompleteMultipartUploadCommandOutput> {
@@ -93,5 +103,48 @@ export class S3Service {
       this.logger.error(error.message, error.stack)
       throw new AppException(S3_ERROR.DOWNLOAD_FAILED)
     }
+  }
+
+  /**
+   * !WARNING: when you generate the Url via this feature, it will cache in CDN,
+   * !So every you retry it will re-generation, so the cache is useless
+   * !Be careful if you don't want your bill upgrade twice :))
+   * * Using when you want to share individual file
+   */
+  getSignURL(type: Bucket, url: string, time: Date, ipAddress?: string) {
+    return getSignedUrl({
+      url: (type === 'public' ? this.cloudfrontPublic : this.cloudfrontSecret) + url,
+      privateKey:
+        type === 'public'
+          ? this.config.get('s3.bucketPublic.cloudfrontKey')
+          : this.config.get('s3.bucketSecret.cloudfrontKey'),
+      keyPairId:
+        type === 'public'
+          ? this.config.get('s3.bucketPublic.cloudfrontKeyPairId')
+          : this.config.get('s3.bucketSecret.cloudfrontKeyPairId'),
+      dateLessThan: time.toISOString(),
+      ...(ipAddress ? { ipAddress } : {}),
+    })
+  }
+  /**
+   * !WARNING: when you generate the Url via this feature, it will cache in CDN,
+   * !So every you retry it will re-generation, so the cache is useless
+   * !Be careful if you don't want your bill upgrade twice :))
+   * * Using when you want to share folder for who subscription VIP | Premium to access VIP resources
+   */
+  getSignCookie(type: Bucket, url: string, time: Date, ipAddress?: string) {
+    return getSignedCookies({
+      url: (type === 'public' ? this.cloudfrontPublic : this.cloudfrontSecret) + url,
+      privateKey:
+        type === 'public'
+          ? this.config.get('s3.bucketPublic.cloudfrontKey')
+          : this.config.get('s3.bucketSecret.cloudfrontKey'),
+      keyPairId:
+        type === 'public'
+          ? this.config.get('s3.bucketPublic.cloudfrontKeyPairId')
+          : this.config.get('s3.bucketSecret.cloudfrontKeyPairId'),
+      dateLessThan: time.toISOString(),
+      ...(ipAddress ? { ipAddress } : {}),
+    })
   }
 }

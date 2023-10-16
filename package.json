@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.428.0",
+    "@aws-sdk/cloudfront-signer": "^3.428.0",
     "@aws-sdk/lib-storage": "^3.428.0",
     "@fastify/compress": "^6.4.0",
     "@fastify/cookie": "^9.1.0",
@@ -66,6 +67,7 @@
     "cache-manager-ioredis-yet": "^1.2.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "dayjs": "^1.11.10",
     "fastify": "^4.23.2",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
