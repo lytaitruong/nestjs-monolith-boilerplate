@@ -1,4 +1,6 @@
 import { CommonModule, configuration } from '@/common'
+import { FastifyAdapter } from '@bull-board/fastify'
+import { BullBoardModule } from '@bull-board/nestjs'
 import { BullModule } from '@nestjs/bullmq'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
@@ -43,6 +45,10 @@ import { PrismaModule } from './modules/prisma'
           },
         }
       },
+    }),
+    BullBoardModule.forRoot({
+      adapter: FastifyAdapter,
+      route: '/queues',
     }),
     CommonModule,
     PrismaModule,
