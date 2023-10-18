@@ -1,8 +1,8 @@
 export const USER_IMAGE_PROCESSOR = `user-image`
 export const USER_IMAGE = {
-  UPLOAD: 'user-image-upload',
+  CONVERTER: 'user-image-converter',
 }
-export interface IUserImageUploadData {
+export interface IUserImageConverterData {
   name: string
   type: string
   data: Buffer

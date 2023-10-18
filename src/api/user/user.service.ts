@@ -1,4 +1,4 @@
-import { AppException } from '@/common'
+import { AppException, MimetypeImage } from '@/common'
 import { JwtInfo } from '@/modules/guard'
 import { PrismaService } from '@/modules/prisma'
 import { S3Service } from '@/modules/s3'
@@ -7,9 +7,10 @@ import { Injectable } from '@nestjs/common'
 import { User } from '@prisma/client'
 import { Queue } from 'bullmq'
 import * as dayjs from 'dayjs'
+import { basename, extname, join } from 'path'
 import { UserUpdateDto } from './user.dto'
 import { USER_ERROR } from './user.exception'
-import { IUserImageUploadData, USER_IMAGE, USER_IMAGE_PROCESSOR } from './user.interface'
+import { IUserImageConverterData, USER_IMAGE, USER_IMAGE_PROCESSOR } from './user.interface'
 
 @Injectable()
 export class UserService {
@@ -17,7 +18,7 @@ export class UserService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly s3: S3Service,
-    @InjectQueue(USER_IMAGE_PROCESSOR) private readonly queue: Queue<IUserImageUploadData>,
+    @InjectQueue(USER_IMAGE_PROCESSOR) private readonly queue: Queue<IUserImageConverterData>,
   ) {}
 
   async getOne(info: JwtInfo): Promise<Partial<User>> {
@@ -31,28 +32,30 @@ export class UserService {
     return user
   }
 
-  async update(info: JwtInfo, data: UserUpdateDto) {
+  async update(info: JwtInfo, data: UserUpdateDto, image = data.image.filename) {
     if (data.phone) {
       const phoneExist = await this.prisma.user.findUnique({ where: { phone: data.phone } })
       if (phoneExist) throw new AppException(USER_ERROR.PHONE_EXISTED)
     }
     if (data.image) {
-      await this.queue.add(USER_IMAGE.UPLOAD, {
-        name: this.PHOTO_FOLDER + '/' + data.image.filename,
+      if (data.image.mimetype !== MimetypeImage.IMAGE_WEBP)
+        image = join(basename(data.image.filename, extname(data.image.filename))) + '.webp'
+      await this.queue.add(USER_IMAGE.CONVERTER, {
         type: data.image.mimetype,
         data: await data.image.toBuffer(),
+        name: this.PHOTO_FOLDER + '/' + image,
       })
     }
 
     const user = await this.prisma.user.update({
       where: { id: info.sub },
       data: {
-        ...(data.image ? { image: encodeURI(data.image.filename) } : {}),
         ...(data.phone ? { phone: data.phone } : {}),
+        ...(data.image ? { image: encodeURI(image) } : {}),
       },
       select: { id: true, email: true, image: true, state: true, gender: true, createdAt: true },
     })
-    // My cloudfront has set prefix with Photo so we don't need add it right here
+    // My cloudfront has set prefix with Photo so we don't need add it right
     user.image = this.s3.getSignURL('public', user.image, dayjs().endOf('day').toDate())
     return user
   }
