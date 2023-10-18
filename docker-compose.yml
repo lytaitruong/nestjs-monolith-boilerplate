@@ -47,6 +47,23 @@ services:
     networks:
       - nestjs-cache
 
+  redis-commaner:
+    container_name: redis-commaner
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${IOREDIS_PASSWORD}
+    ports:
+      - '8081:8081'
+    env_file:
+      - .env
+    networks:
+      - nestjs-cache
+    depends_on:
+      - redis
+
 volumes:
   redis:
   postgres_db:

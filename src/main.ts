@@ -30,7 +30,7 @@ async function bootstrap() {
   const { port, version, service, whitelist } = config.get<IConfigApp>('app')
   const { domain, path, secret, secure, httpOnly } = config.get<IConfigCookie>('cookie')
   // PLUGIN
-  app.setGlobalPrefix(`api/${version}`)
+  app.setGlobalPrefix(`/api/${version}`)
   app.register(helmet, helmetSetting)
   app.register(upload, uploadSetting)
   app.register(cookie, { secret, parseOptions: { sameSite: 'strict', domain, path, secure, httpOnly } })

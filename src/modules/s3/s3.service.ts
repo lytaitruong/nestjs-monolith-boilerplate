@@ -113,7 +113,7 @@ export class S3Service {
    */
   getSignURL(type: Bucket, url: string, time: Date, ipAddress?: string) {
     return getSignedUrl({
-      url: (type === 'public' ? this.cloudfrontPublic : this.cloudfrontSecret) + url,
+      url: (type === 'public' ? this.cloudfrontPublic : this.cloudfrontSecret) + '/' + url,
       privateKey:
         type === 'public'
           ? this.config.get('s3.bucketPublic.cloudfrontKey')
@@ -134,7 +134,7 @@ export class S3Service {
    */
   getSignCookie(type: Bucket, url: string, time: Date, ipAddress?: string) {
     return getSignedCookies({
-      url: (type === 'public' ? this.cloudfrontPublic : this.cloudfrontSecret) + url,
+      url: (type === 'public' ? this.cloudfrontPublic : this.cloudfrontSecret) + '/' + url,
       privateKey:
         type === 'public'
           ? this.config.get('s3.bucketPublic.cloudfrontKey')

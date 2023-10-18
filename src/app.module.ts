@@ -1,6 +1,7 @@
 import { CommonModule, configuration } from '@/common'
+import { BullModule } from '@nestjs/bullmq'
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { AcceptLanguageResolver, HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n'
 import { join } from 'path'
 import { AuthModule } from './api/auth/auth.module'
@@ -29,6 +30,19 @@ import { PrismaModule } from './modules/prisma'
       ...(process.env.NODE_ENV === 'default'
         ? { typesOutputPath: join(__dirname, '../src/generated/i18n.generated.ts') }
         : {}),
+    }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return {
+          connection: {
+            host: config.get('ioredis.host'),
+            port: config.get('ioredis.port'),
+            password: config.get('ioredis.password'),
+          },
+        }
+      },
     }),
     CommonModule,
     PrismaModule,
