@@ -59,8 +59,10 @@
 - [x] Setup Cache using Redis or Local LRU
 - [x] Setup Docker
 - [x] Setup Base CRUD follow DRY principles
-- [ ] Setup Queue using Bull
+- [x] Setup Queue using BullMQ
 - [x] Setup Upload file ([Aws S3](https://aws.amazon.com/s3/))
+  - [x] Using BullMQ to process converter image to WebP and upload to s3
+  - [x] Using BullMQ separate worker to prevent block event loop
 - [x] Setup Content delivery network ([Aws Cloudfront](https://aws.amazon.com/cloudfront/))
   - [x] Setup Policies access
   - [x] Setup Presigned URL to restrict unauthorized access

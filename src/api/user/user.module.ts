@@ -3,7 +3,7 @@ import { BullMQAdapter } from '@bull-board/api/bullMQAdapter'
 import { BullBoardModule } from '@bull-board/nestjs'
 import { BullModule } from '@nestjs/bullmq'
 import { Module } from '@nestjs/common'
-import { UserImageProcessor } from './processor/user-image.processor'
+import { join } from 'path'
 import { UserController } from './user.controller'
 import { USER_IMAGE_PROCESSOR } from './user.interface'
 import { UserService } from './user.service'
@@ -13,6 +13,7 @@ import { UserService } from './user.service'
     S3Module,
     BullModule.registerQueue({
       name: USER_IMAGE_PROCESSOR,
+      processors: [{ path: join(__dirname, 'processor/user-image.processor.js'), concurrency: 10 }],
       defaultJobOptions: {
         attempts: 3,
         backoff: { type: 'exponential', delay: 1000 },
@@ -23,7 +24,7 @@ import { UserService } from './user.service'
     BullBoardModule.forFeature({ name: USER_IMAGE_PROCESSOR, adapter: BullMQAdapter }),
   ],
   exports: [UserService],
-  providers: [UserService, UserImageProcessor],
+  providers: [UserService],
   controllers: [UserController],
 })
 export class UserModule {}

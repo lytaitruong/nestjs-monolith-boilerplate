@@ -34,6 +34,7 @@ export const configuration = (): IConfig => ({
  * @returns @fastify/multipart upload settings
  */
 export const uploadSetting = () => ({
+  attachFieldsToBody: true,
   limits: {
     fieldNameSize: 100, // Max field name size in bytes
     fieldSize: 100, // Max field value size in bytes
