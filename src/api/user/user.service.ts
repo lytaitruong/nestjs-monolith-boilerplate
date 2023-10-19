@@ -1,4 +1,4 @@
-import { AppException, MimetypeImage } from '@/common'
+import { AppException } from '@/common'
 import { JwtInfo } from '@/modules/guard'
 import { PrismaService } from '@/modules/prisma'
 import { S3Service } from '@/modules/s3'
@@ -7,7 +7,6 @@ import { Injectable } from '@nestjs/common'
 import { User } from '@prisma/client'
 import { Queue } from 'bullmq'
 import * as dayjs from 'dayjs'
-import { basename, extname, join } from 'path'
 import { UserUpdateDto } from './user.dto'
 import { USER_ERROR } from './user.exception'
 import { IUserImageConverterData, USER_IMAGE, USER_IMAGE_PROCESSOR } from './user.interface'
@@ -32,14 +31,12 @@ export class UserService {
     return user
   }
 
-  async update(info: JwtInfo, data: UserUpdateDto, image = data.image.filename) {
+  async update(info: JwtInfo, data: UserUpdateDto, image = `${info.sub}_avatar.webp`) {
     if (data.phone) {
       const phoneExist = await this.prisma.user.findUnique({ where: { phone: data.phone } })
       if (phoneExist) throw new AppException(USER_ERROR.PHONE_EXISTED)
     }
     if (data.image) {
-      if (data.image.mimetype !== MimetypeImage.IMAGE_WEBP)
-        image = join(basename(data.image.filename, extname(data.image.filename))) + '.webp'
       await this.queue.add(USER_IMAGE.CONVERTER, {
         type: data.image.mimetype,
         data: await data.image.toBuffer(),
@@ -51,7 +48,7 @@ export class UserService {
       where: { id: info.sub },
       data: {
         ...(data.phone ? { phone: data.phone } : {}),
-        ...(data.image ? { image: encodeURI(image) } : {}),
+        ...(data.image ? { image } : {}),
       },
       select: { id: true, email: true, image: true, state: true, gender: true, createdAt: true },
     })

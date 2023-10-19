@@ -39,6 +39,7 @@ export const IsContainMimeType = (property: string[], validationOptions?: Valida
       options: validationOptions,
       validator: {
         validate(value: MultipartFile | MultipartFile[], args: ValidationArguments) {
+          if (!value) return false
           return isArray(value)
             ? value.every((item) => args.constraints[0].includes(item.mimetype))
             : args.constraints[0].includes(value.mimetype)
