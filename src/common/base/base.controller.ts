@@ -37,7 +37,7 @@ export const BaseController = <R, C, U, P, Q, T = any>(
       ...others: []
     ) {
       const result = await this.service.getAll(req.user, param, query, ...others)
-      if (!query['export']) return result
+      if (!query['export']) return res.send(result)
 
       return res
         .header(HEADERS.CONTENT_DISPOSITION, `attachment; filename=${query['filename'] || result['name']}`)
