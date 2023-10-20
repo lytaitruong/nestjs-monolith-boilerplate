@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { AcceptLanguageResolver, HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n'
 import { join } from 'path'
 import { AuthModule } from './api/auth/auth.module'
+import { FileModule } from './api/file/file.module'
 import { TaskModule } from './api/task/task.module'
 import { UserModule } from './api/user/user.module'
 import { AppController } from './app.controller'
@@ -55,6 +56,7 @@ import { PrismaModule } from './modules/prisma'
     AuthModule,
     UserModule,
     TaskModule,
+    FileModule,
   ],
   controllers: [AppController],
 })

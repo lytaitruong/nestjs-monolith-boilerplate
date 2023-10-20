@@ -6,3 +6,7 @@ export const MimetypeImage = {
   IMAGE_SVG: 'image/svg+xml',
   IMAGE_WEBP: 'image/webp',
 } as const
+
+export const MimetypeDocument = {
+  CSV: 'text/csv',
+} as const
