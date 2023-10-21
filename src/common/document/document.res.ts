@@ -1,6 +1,6 @@
 import { HttpStatus, Type, applyDecorators } from '@nestjs/common'
 import { ApiProperty, ApiResponse } from '@nestjs/swagger'
-import { ErrorType, IAppError, IError } from '../common.error'
+import { IAppError, IError } from '../common.error'
 
 export const ApiPassedRes = <DataDto extends Type<unknown>>(dataDto: DataDto, status: HttpStatus = 200) => {
   return ApiResponse({ type: dataDto, status })
@@ -8,8 +8,8 @@ export const ApiPassedRes = <DataDto extends Type<unknown>>(dataDto: DataDto, st
 
 export const ApiSchemaRes = (schema: IAppError): Type<IError> => {
   class SchemaResponse implements IError {
-    @ApiProperty({ name: 'type', type: 'enum', enum: ErrorType, default: ErrorType.REST })
-    type: ErrorType
+    @ApiProperty({ name: 'type', type: 'string', default: 'REST' })
+    type: 'REST' | 'GRPC' | 'GRAPHQL'
 
     @ApiProperty({ name: 'time', type: 'string', default: new Date().toISOString() })
     time: string

@@ -1,5 +1,3 @@
-export type Bucket = 'public' | 'secret'
-
 export interface IConfigBucket {
   name: string
   cloudfrontUrl: string

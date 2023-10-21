@@ -67,8 +67,8 @@
 
 - [x] Setup Stream large file CSV
   - [x] Using BullMQ to process bulk-write insert
-  - [] Using BullMQ to rollback if any error
-  - [] Using BullMQ to notification if success or failed to notice for end-user
+  - [ ] Using BullMQ to rollback if any error
+  - [ ] Using BullMQ to notification if success or failed to notice for end-user
 
 - [x] Setup Content delivery network ([Aws Cloudfront](https://aws.amazon.com/cloudfront/))
   - [x] Setup Policies access

@@ -26,7 +26,7 @@ export class UserService {
       select: { id: true, email: true, image: true, state: true, gender: true, createdAt: true },
     })
     // !Important of time expired, it will burn your cash -> Cache Useless if time expired difference
-    user.image = this.s3.getSignURL('public', user.image, dayjs().endOf('day').toDate())
+    user.image = this.s3.getSignURL('bucketPublic', user.image, dayjs().endOf('day').toDate())
 
     return user
   }
@@ -53,7 +53,7 @@ export class UserService {
       select: { id: true, email: true, image: true, state: true, gender: true, createdAt: true },
     })
     // My cloudfront has set prefix with Photo so we don't need add it right
-    user.image = this.s3.getSignURL('public', user.image, dayjs().endOf('day').toDate())
+    user.image = this.s3.getSignURL('bucketPublic', user.image, dayjs().endOf('day').toDate())
     return user
   }
 }

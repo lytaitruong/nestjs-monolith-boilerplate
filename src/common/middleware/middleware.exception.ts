@@ -2,7 +2,7 @@ import { I18nTranslations } from '@/generated/i18n.generated'
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common'
 import { isArray } from 'lodash'
 import { I18nContext } from 'nestjs-i18n'
-import { AppException, ErrorType, IError } from '../common.error'
+import { AppException, IError } from '../common.error'
 import { IRes } from '../common.interface'
 
 @Catch(HttpException)
@@ -31,7 +31,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
   private formatError(message: string | string[], code: string): IError {
     return {
-      type: ErrorType.REST,
+      type: 'REST',
       code,
       time: new Date().toISOString(),
       message: isArray(message) ? message[0] : message,
