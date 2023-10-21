@@ -1,7 +1,7 @@
 import { ApiFailedRes, HEADERS, IReq, TTL } from '@/common'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { Controller, ExecutionContext, Inject, UseGuards, applyDecorators, createParamDecorator } from '@nestjs/common'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiCookieAuth, ApiTags } from '@nestjs/swagger'
 import { Cache } from 'cache-manager'
 import { randomUUID } from 'crypto'
 import { getClientIp } from 'request-ip'
@@ -18,9 +18,10 @@ export const Device = createParamDecorator((data: unknown, context: ExecutionCon
 })
 
 // ! The order of guard is important, which will be execute first
-export const GuardController = (name: string, tags = name) => {
+export const JwtController = (name: string, tags = name) => {
   return applyDecorators(
     ApiBearerAuth(),
+    ApiCookieAuth(),
     ApiTags(tags),
     Controller(name),
     UseGuards(JwtAccessGuard, RoleGuard),

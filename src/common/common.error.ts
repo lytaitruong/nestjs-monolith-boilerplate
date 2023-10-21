@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Inject } from '@nestjs/common'
 import { PinoLogger } from 'nestjs-pino'
-import { ISO_DATE } from './common.enum'
+import { ISO_DATE } from './common.interface'
 
 export interface IError {
   type: 'REST' | 'GRPC' | 'GRAPHQL'

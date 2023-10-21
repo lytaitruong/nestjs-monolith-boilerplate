@@ -1,11 +1,11 @@
 import { Route } from '@/app.constant'
 import { BaseController } from '@/common'
-import { GuardController } from '@/modules/guard'
+import { JwtController } from '@/modules/guard'
 import { TaskCreateDto, TaskParamDto, TaskQueryDto, TaskUpdateDto } from './task.dto'
 import { TaskResultDto } from './task.res'
 import { TaskService } from './task.service'
 
-@GuardController(Route.TASK)
+@JwtController(Route.TASK)
 export class TaskController extends BaseController(
   TaskResultDto,
   TaskCreateDto,

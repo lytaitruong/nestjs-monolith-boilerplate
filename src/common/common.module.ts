@@ -4,8 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { Cache } from 'cache-manager'
 import { RedisStore, redisStore } from 'cache-manager-ioredis-yet'
 import { LoggerModule } from 'nestjs-pino'
-import { Env } from './common.enum'
-import { IConfig, IConfigIoredis, IReq } from './common.interface'
+import { Env, IConfig, IConfigIoredis, IReq } from './common.interface'
 
 @Global()
 @Module({

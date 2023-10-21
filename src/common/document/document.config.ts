@@ -21,9 +21,10 @@ export const setupSwagger = (app: INestApplication, version: string, service: st
       scheme: `bearer`,
       bearerFormat: `JWT`,
       name: `authorization`,
-      description: `Please enter refreshToken in following format: Bearer <JWT>`,
+      description: `Please enter accessToken in following format: Bearer <JWT>`,
       in: `header`,
     })
+    .addCookieAuth(`access_token`, { type: `http`, scheme: `bearer`, in: `header` })
     .build()
   const document = SwaggerModule.createDocument(app, configDocument)
 

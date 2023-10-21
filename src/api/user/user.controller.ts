@@ -1,12 +1,12 @@
 import { Route } from '@/app.constant'
 import { ApiPassedRes, IReq, UploadFormData } from '@/common'
-import { GuardController, JwtInfo } from '@/modules/guard'
+import { JwtController, JwtInfo } from '@/modules/guard'
 import { Body, Get, Logger, Patch, Req } from '@nestjs/common'
 import { UserUpdateDto } from './user.dto'
 import { UserProfileRes } from './user.res'
 import { UserService } from './user.service'
 
-@GuardController(Route.USER)
+@JwtController(Route.USER)
 export class UserController {
   private readonly logger = new Logger(UserController.name)
 
