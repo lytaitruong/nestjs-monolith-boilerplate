@@ -59,7 +59,7 @@
   - Refresh token should be 4096 bit to enough strong to hacker can be encrypt
   - Refresh token should be hashing before store in database
 
-### Cons
+### JWT - Cons
 
 - It enough strong to secure but not perfect to defense!!!
   - Hacker: If not secure refresh token. Hacker can stolen via CSRF or XSS
@@ -70,7 +70,7 @@
 <img src="../../../archive/guard/JWT_3.webp" />
 </p>
 
-### Best Practices
+### JWT - Best Practices
 
 - [Don't Revoking Access to JWT tokens with a Blacklist/Deny List](https://supertokens.com/blog/revoking-access-with-a-jwt-blacklist)
 - [Refresh token should rotation to prevent brute-force attack](https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/)
@@ -86,6 +86,10 @@
     - The server has the activate client account to provide token & scope
   - Resource Server:
     - The server integration with Authorization Server to verify token
+
+<p align="center">
+<img src="../../../archive/guard/OAUTH_1.webp" />
+</p>
 
 ### Oauth2 - Why we need
 
@@ -121,6 +125,11 @@
 - Remember to storage raw_data and accessToken & Refresh Token
 - Remember revoke if user sign-out
 
-### Best Practices
+<p align="center">
+<img src="../../../archive/guard/OAUTH_2.webp" />
+</p>
+
+### Oauth2 - Best Practices
 
 - [All you need](https://oauth.net/2/)
+- [Image The flow it work](https://www.youtube.com/watch?v=CPbvxxslDTU)
