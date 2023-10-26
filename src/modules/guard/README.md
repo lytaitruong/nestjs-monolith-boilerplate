@@ -131,5 +131,5 @@
 
 ### Oauth2 - Best Practices
 
-- [All you need](https://oauth.net/2/)
-- [Image The flow it work](https://www.youtube.com/watch?v=CPbvxxslDTU)
+- [Oauth2 Guide](https://oauth.net/2/)
+- [Videos Guide](https://www.youtube.com/watch?v=CPbvxxslDTU)
