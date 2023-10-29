@@ -2,6 +2,7 @@ import { AppException } from '@/common'
 import { JwtInfo } from '@/modules/guard'
 import { PrismaService } from '@/modules/prisma'
 import { S3Service } from '@/modules/s3'
+import { StripeService } from '@/modules/stripe'
 import { InjectQueue } from '@nestjs/bullmq'
 import { Injectable } from '@nestjs/common'
 import { User } from '@prisma/client'
@@ -16,6 +17,7 @@ export class UserService {
   private readonly PHOTO_FOLDER = 'photos'
   constructor(
     private readonly prisma: PrismaService,
+    private readonly stripe: StripeService,
     private readonly s3: S3Service,
     @InjectQueue(USER_IMAGE_PROCESSOR) private readonly queue: Queue<IUserImageConverterData>,
   ) {}

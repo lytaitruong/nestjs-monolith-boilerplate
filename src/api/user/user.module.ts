@@ -1,8 +1,10 @@
 import { S3Module } from '@/modules/s3'
+import { StripeModule } from '@/modules/stripe'
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter'
 import { BullBoardModule } from '@bull-board/nestjs'
 import { BullModule } from '@nestjs/bullmq'
 import { Module } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { join } from 'path'
 import { UserController } from './user.controller'
 import { USER_IMAGE_PROCESSOR } from './user.interface'
@@ -22,6 +24,13 @@ import { UserService } from './user.service'
       },
     }),
     BullBoardModule.forFeature({ name: USER_IMAGE_PROCESSOR, adapter: BullMQAdapter }),
+    StripeModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        apiKey: config.get<string>('stripe.secretKey'),
+        options: { apiVersion: '2023-10-16' },
+      }),
+    }),
   ],
   exports: [UserService],
   providers: [UserService],
