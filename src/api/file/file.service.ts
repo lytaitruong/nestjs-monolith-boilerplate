@@ -30,7 +30,7 @@ export class FileService {
 
   parseCSV<E, T>(
     readable: Readable,
-    execute: (readable: Readable, ecords: T[], data: E) => void,
+    execute: (readable: Readable, records: T[], data: E) => void,
     records: T[] = [],
     { encoding = 'utf-8', trim = true, columns = true, skip_empty_lines = true, ...other }: Options = {},
   ): Promise<T[]> {

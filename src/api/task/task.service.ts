@@ -2,7 +2,7 @@ import { Res } from '@/common'
 import { IBaseService, Str } from '@/common/base'
 import { JwtInfo } from '@/modules/guard'
 import { PrismaService } from '@/modules/prisma'
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Prisma, Task } from '@prisma/client'
 import { createPaginator } from 'prisma-pagination'
@@ -14,7 +14,6 @@ export class TaskService
   implements IBaseService<TaskResultDto, TaskCreateDto, TaskUpdateDto, TaskParamDto, TaskQueryDto, JwtInfo>
 {
   private readonly paginate = createPaginator({ perPage: 10, page: 1 })
-  private readonly logger = new Logger(TaskService.name)
 
   constructor(
     private readonly config: ConfigService,

@@ -2,8 +2,7 @@ import { AppException, scryptHash, scryptVerify } from '@/common'
 import { GuardService, IGuardService, JwtInfo, Oauth2Info } from '@/modules/guard'
 import { GuardRefreshRes } from '@/modules/guard/guard.dto'
 import { PrismaService } from '@/modules/prisma'
-import { Injectable, Logger } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
+import { Injectable } from '@nestjs/common'
 import { createId } from '@paralleldrive/cuid2'
 import { Provider, Role, Status } from '@prisma/client'
 import { IDevice } from 'ua-parser-js'
@@ -12,10 +11,7 @@ import { AuthOauth2Res } from './auth.res'
 
 @Injectable()
 export class AuthService implements IGuardService {
-  private readonly logger = new Logger(AuthService.name)
-
   constructor(
-    private readonly config: ConfigService,
     private readonly prisma: PrismaService,
     private readonly guard: GuardService,
   ) {}
