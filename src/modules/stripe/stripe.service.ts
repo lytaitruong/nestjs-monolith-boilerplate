@@ -17,7 +17,7 @@ export class StripeService {
     return result
   }
 
-  @CatchErr(STRIPE_ERROR.CREATE_CUSTOMER_FAILED)
+  @CatchErr(STRIPE_ERROR.CREATE_PAYMENT_FAILED)
   async createPaymentIntent(params: Stripe.PaymentIntentCreateParams) {
     const result = await this.stripe.paymentIntents.create(params)
     return result
