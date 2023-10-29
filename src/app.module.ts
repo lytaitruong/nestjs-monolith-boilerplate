@@ -10,6 +10,7 @@ import { AuthModule } from './api/auth/auth.module'
 import { FileModule } from './api/file/file.module'
 import { TaskModule } from './api/task/task.module'
 import { UserModule } from './api/user/user.module'
+import { WebhookModule } from './api/webhook/webhook.module'
 import { AppController } from './app.controller'
 import { PrismaModule } from './modules/prisma'
 
@@ -57,6 +58,7 @@ import { PrismaModule } from './modules/prisma'
     UserModule,
     TaskModule,
     FileModule,
+    WebhookModule,
   ],
   controllers: [AppController],
 })

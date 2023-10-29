@@ -3,4 +3,5 @@ export enum Route {
   USER = 'users',
   TASK = 'tasks',
   FILE = 'files',
+  WEBHOOK = 'webhook',
 }
