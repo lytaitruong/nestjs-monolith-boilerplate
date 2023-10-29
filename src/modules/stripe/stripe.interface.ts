@@ -13,12 +13,10 @@ export const { ConfigurableModuleClass, MODULE_OPTIONS_TOKEN: STRIPE_OPTIONS_TOK
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 //--------------------------------------------------------------
-export interface IStripeWebhook {
-  parseEvent(data: Stripe.Event): Promise<IResStripe>
-}
+export type StripeData = Stripe.Event
 
 export interface IReqStripe extends FastifyRequest {
-  stripe: Stripe.Event
+  stripe: StripeData
   body: FastifyRequestType['body'] & { livemode: boolean }
   headers: FastifyRequestType['headers'] & { 'stripe-signature': string }
   rawBody: Buffer

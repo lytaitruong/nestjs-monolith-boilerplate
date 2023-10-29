@@ -75,7 +75,9 @@
   - [x] Setup Presigned URL to restrict unauthorized access
   - [x] Setup Presigned Cookies to authorize users to access resources
 
-- [ ] Setup Webhook ([Stripe](https://stripe.com/))
+- [x] Setup Webhook ([Stripe](https://stripe.com/))
+  - [x] Apply [Dynamic Module](https://docs.nestjs.com/fundamentals/dynamic-modules)
+  - [x] Apply [DIP](https://trilon.io/blog/dependency-inversion-principle)
 - [x] Setup i18 localize
 - [ ] Flags Feature
 - [ ] Multi tenant database

@@ -1,11 +1,16 @@
+import { IWebhookService } from '@/api/webhook/webhook.interface'
 import { Inject, Injectable } from '@nestjs/common'
 import Stripe from 'stripe'
-import { IResStripe, IStripeWebhook, STRIPE_OPTIONS_TOKEN, StripeModuleOptions } from './stripe.interface'
+import { PrismaService } from '../prisma'
+import { IResStripe, STRIPE_OPTIONS_TOKEN, StripeData, StripeModuleOptions } from './stripe.interface'
 
 @Injectable()
-export class StripeWebhook implements IStripeWebhook {
+export class StripeWebhook implements IWebhookService<'Stripe'> {
   private readonly stripe: Stripe
-  constructor(@Inject(STRIPE_OPTIONS_TOKEN) private options: StripeModuleOptions) {
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(STRIPE_OPTIONS_TOKEN) private options: StripeModuleOptions,
+  ) {
     this.stripe = new Stripe(this.options.apiKey, this.options.options)
   }
 
@@ -13,14 +18,8 @@ export class StripeWebhook implements IStripeWebhook {
     return this.stripe.webhooks
   }
 
-  async parseEvent(data: Stripe.Event): Promise<IResStripe> {
+  async parseEvent(data: StripeData): Promise<IResStripe> {
     switch (data.type) {
-      case 'payment_intent.payment_failed': {
-        break
-      }
-      case 'payment_intent.partially_funded': {
-        break
-      }
       case 'payment_intent.canceled': {
         break
       }

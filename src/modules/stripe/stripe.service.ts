@@ -11,6 +11,10 @@ export class StripeService {
     this.stripe = new Stripe(this.options.apiKey, this.options.options)
   }
 
+  get webhook(): Stripe.Webhooks {
+    return this.stripe.webhooks
+  }
+
   @CatchErr(STRIPE_ERROR.CREATE_CUSTOMER_FAILED)
   async createCustomer(params: Stripe.CustomerCreateParams) {
     const result = await this.stripe.customers.create(params)
