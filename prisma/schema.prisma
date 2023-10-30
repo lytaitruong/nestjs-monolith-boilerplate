@@ -35,6 +35,12 @@ enum Provider {
   GOOGLE @map("google")
 }
 
+enum TaskStatus {
+  PENDING
+  CANCELED
+  COMPLETE
+}
+
 model Auth {
   userId       String   @map("user_id") @db.VarChar(28)
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -64,12 +70,6 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
 
   @@map("users")
-}
-
-enum TaskStatus {
-  PENDING
-  CANCELED
-  COMPLETE
 }
 
 model Task {

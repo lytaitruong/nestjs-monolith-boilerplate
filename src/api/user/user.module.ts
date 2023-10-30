@@ -12,7 +12,6 @@ import { UserService } from './user.service'
 
 @Module({
   imports: [
-    S3Module,
     BullModule.registerQueue({
       name: USER_IMAGE_PROCESSOR,
       processors: [{ path: join(__dirname, 'processor/user-image.processor.js'), concurrency: 10 }],
@@ -31,6 +30,7 @@ import { UserService } from './user.service'
         options: { apiVersion: '2023-10-16' },
       }),
     }),
+    S3Module,
   ],
   exports: [UserService],
   providers: [UserService],

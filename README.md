@@ -65,8 +65,8 @@
   - [x] Using BullMQ separate worker to prevent block event loop
 - [x] Setup Stream large file CSV
   - [x] Using BullMQ to process bulk-write insert
-  - [ ] Using BullMQ to rollback if any error
-  - [ ] Using BullMQ to notification if success or failed to notice for end-user
+  - [x] Using BullMQ to rollback if any error
+  - [x] Using BullMQ to notification if success or failed to notice for end-user
 - [x] Setup Content delivery network ([Aws Cloudfront](https://aws.amazon.com/cloudfront/))
   - [x] Setup Policies access
   - [x] Setup Presigned URL to restrict unauthorized access

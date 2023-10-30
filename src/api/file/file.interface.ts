@@ -1,6 +1,9 @@
 export const FILE_CSV_TASK_INSERT = 'file-task-insert'
 export const FILE_CSV_TASK_REPORT = 'file-task-report'
 
+export type TaskInsertJob = 'insert-write'
+export type TaskReportJob = 'report-success' | 'report-failed'
+
 export interface IFileTaskData {
   title: string
   content: string
@@ -15,7 +18,7 @@ export interface IFileTaskInsert {
 }
 
 export interface IFileTaskReport {
-  status: 'success' | 'failed'
-  failedRecord: string[]
-  totalRecord?: number
+  sub: string
+  date: Date
+  totalRecord: number
 }

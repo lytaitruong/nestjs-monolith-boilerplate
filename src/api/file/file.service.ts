@@ -6,24 +6,26 @@ import { randomUUID } from 'crypto'
 import { Options, parse } from 'csv-parse'
 import { Readable } from 'stream'
 import { FileCreateDto } from './file.dto'
-import { FILE_CSV_TASK_INSERT, IFileTaskData, IFileTaskInsert } from './file.interface'
+import { FILE_CSV_TASK_INSERT, IFileTaskData, IFileTaskInsert, TaskInsertJob } from './file.interface'
 
 @Injectable()
 export class FileService {
-  constructor(@InjectQueue(FILE_CSV_TASK_INSERT) private readonly queue: Queue<IFileTaskInsert>) {}
+  constructor(
+    @InjectQueue(FILE_CSV_TASK_INSERT) private readonly queue: Queue<IFileTaskInsert, string, TaskInsertJob>,
+  ) {}
 
   async create(info: JwtInfo, data: FileCreateDto, date = new Date()) {
     const execute = async (readable: Readable, records: IFileTaskData[], data: IFileTaskData) => {
       if (records.length > 10_000) {
         readable.pause()
-        await this.queue.add('bulk-write', { sub: info.sub, data: records, date })
+        await this.queue.add('insert-write', { sub: info.sub, data: records, date })
         records.length = 0
         readable.resume()
       }
       records.push(data)
     }
     const remain = await this.parseCSV(Readable.from(await data.file.toBuffer()), execute)
-    this.queue.add('bulk-write', { sub: info.sub, data: remain, date, last: true })
+    this.queue.add('insert-write', { sub: info.sub, data: remain, date, last: true })
 
     return { id: randomUUID() }
   }

@@ -10,7 +10,7 @@ import { Queue } from 'bullmq'
 import * as dayjs from 'dayjs'
 import { UserUpdateDto } from './user.dto'
 import { USER_ERROR } from './user.exception'
-import { IUserImageConverterData, USER_IMAGE, USER_IMAGE_PROCESSOR } from './user.interface'
+import { IUserImageConverterData, USER_IMAGE_PROCESSOR, UserImageJob } from './user.interface'
 
 @Injectable()
 export class UserService {
@@ -19,7 +19,7 @@ export class UserService {
     private readonly prisma: PrismaService,
     private readonly stripe: StripeService,
     private readonly s3: S3Service,
-    @InjectQueue(USER_IMAGE_PROCESSOR) private readonly queue: Queue<IUserImageConverterData>,
+    @InjectQueue(USER_IMAGE_PROCESSOR) private readonly queue: Queue<IUserImageConverterData, string, UserImageJob>,
   ) {}
 
   async getOne(info: JwtInfo): Promise<Partial<User>> {
@@ -39,7 +39,7 @@ export class UserService {
       if (phoneExist) throw new AppException(USER_ERROR.PHONE_EXISTED)
     }
     if (data.image) {
-      await this.queue.add(USER_IMAGE.CONVERTER, {
+      await this.queue.add('user-image-converter', {
         type: data.image.mimetype,
         data: await data.image.toBuffer(),
         name: this.PHOTO_FOLDER + '/' + image,

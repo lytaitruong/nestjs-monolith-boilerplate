@@ -47,7 +47,7 @@ async function bootstrap() {
   app.useGlobalFilters(new PrismaClientExceptionFilter(), new HttpExceptionFilter())
   app.useGlobalInterceptors(new HttpInterceptor())
   // SWAGGER
-  if (config.get('env') !== Env.PRODUCTION) {
+  if (config.get<Env>('env') !== Env.PRODUCTION) {
     setupSwagger(app, version, service, config.get<IConfigSwagger>('swagger'))
   }
   // CORS
