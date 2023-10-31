@@ -16,28 +16,22 @@ permissions:
   contents: read  # This is required for actions/checkout
 
 jobs:
-  build:
+  defined-metadata:
+    name: Metadata
     runs-on: self-hosted
+    outputs:
+      repository-name: ${{ steps.defined-env.outputs.repository-name }}
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
+    - name: Set Environment
+      id: defined-env
+      run: |
+        echo "repository-name=${{ env.ECR_REPOSITORY }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-session-name: OIDCSession
-          role-to-assume: ${{ secrets.AWS_IAM_ROLE_ASSUME }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build Docker Image to Amazon ECR
-        id: build-and-push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          platforms: linux/arm64
-          push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}-${{ env.ECR_ENVIRONMENT }}:${{ github.sha }}
+  build-image:
+    needs: [defined-metadata]
+    name: Build & Push Image to ECR
+    uses: ./.github/workflows/call-build.yml
+    with:
+      repository-name: ${{ needs.defined-metadata.outputs.repository-name }}
+    secrets:
+      AWS_IAM_ROLE_ASSUME: ${{ secrets.AWS_IAM_ROLE_ASSUME }}
