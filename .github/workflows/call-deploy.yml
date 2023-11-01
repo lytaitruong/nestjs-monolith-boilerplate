@@ -1,0 +1,50 @@
+name: Deployment to ECS
+
+on:
+  workflow_call:
+    inputs:
+      ecs-task-definition:
+        type: string
+        required: true
+      ecs-container:
+        type: string
+        required: true
+      ecs-service:
+        type: string
+        required: true
+      ecs-cluster:
+        type: string
+        required: true
+      ecr-image:
+        type: string
+        required: true
+    secrets:
+      AWS_IAM_ROLE_ASSUME:
+        required: true
+
+jobs:
+  deployment:
+    runs-on: self-hosted
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-session-name: OIDCSession
+        role-to-assume: ${{ secrets.AWS_IAM_ROLE_ASSUME }}
+        aws-region: ap-southeast-1
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ inputs.ecs-task-definition }}.json
+        container-name: ${{ inputs.ecs-container }}
+        image: ${{ inputs.ecr-image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: ${{ inputs.ecs-service }}
+        cluster: ${{ inputs.ecs-cluster }}
+        wait-for-service-stability: true
