@@ -6,7 +6,7 @@ ENV NODE_ENV ${NODE_ENV}
 
 WORKDIR /usr/src/app
 
-COPY package*.json bun.lockb tsconfig*.json ./
+COPY package*.json bun.lockb tsconfig*.json nest-cli.json ./
 COPY prisma ./prisma
 
 RUN apt-get update \
