@@ -10,6 +10,10 @@ on:
 env:
   ECR_REPOSITORY: nestjs-monolith-boilerplate
   ECR_ENVIRONMENT: ${{ github.head_ref || github.ref_name }}
+  ECS_CONTAINER: nestjs-monolith
+  ECS_CLUSTER: nestjs-monolith-cluster
+  ECS_SERVICE: nestjs-monolith-service
+  ECS_TASK_DEFINITION: ./.aws/task-definition
 
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -21,11 +25,19 @@ jobs:
     runs-on: self-hosted
     outputs:
       repository-name: ${{ steps.defined-env.outputs.repository-name }}
+      ecs-task-definition: ${{ steps.defined-env.outputs.task-definition }}
+      ecs-container: ${{ steps.defined-env.outputs.container }}
+      ecs-service: ${{ steps.defined-env.outputs.ecs-service }}
+      ecs-cluster: ${{ steps.defined-env.outputs.ecs-cluster }}
     steps:
     - name: Set Environment
       id: defined-env
       run: |
         echo "repository-name=${{ env.ECR_REPOSITORY }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
+        echo "task-definition=${{ env.ECS_TASK_DEFINITION }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
+        echo "container=${{ env.ECS_CONTAINER }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
+        echo "ecs-service=${{ env.ECS_SERVICE }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
+        echo "ecs-cluster=${{ env.ECS_CLUSTER }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
 
   build-image:
     needs: [defined-metadata]
@@ -35,3 +47,32 @@ jobs:
       repository-name: ${{ needs.defined-metadata.outputs.repository-name }}
     secrets:
       AWS_IAM_ROLE_ASSUME: ${{ secrets.AWS_IAM_ROLE_ASSUME }}
+
+  deployment:
+    needs: [defined-metadata, build-image]
+    if: always() && (needs.defined-metadata.result == 'success' && needs.build-image.result == 'success' && !contains(needs.*.result, 'cancelled'))
+    name: Deployment to ECS
+    runs-on: self-hosted
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-session-name: OIDCSession
+        role-to-assume: ${{ secrets.AWS_IAM_ROLE_ASSUME }}
+        aws-region: ap-southeast-1
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ needs.defined-metadata.outputs.ecs-task-definition }}.json
+        container-name: ${{ needs.defined-metadata.outputs.ecs-container }}
+        image: ${{ inputs.ecr-image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: ${{ needs.defined-metadata.outputs.ecs-service }}
+        cluster: ${{ needs.defined-metadata.outputs.ecs-cluster }}
+        wait-for-service-stability: true
