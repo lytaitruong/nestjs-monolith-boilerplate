@@ -78,7 +78,7 @@
 - [ ] Github actions to ECS
   - [x] Github actions continuous integration to ECR
     - [x] Apply [OpenID Connect](https://openid.net/developers/how-connect-works/) instead of AWS SECRET KEY to [security](https://aws.amazon.com/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/)
-    - [x] Apply buildx arm64 to make compatibility with [AWS Graviton](https://www.youtube.com/watch?v=Fvh4djznuuM&t=1s)
+    - [x] Apply buildx arm64 to make compatibility with [AWS Graviton2](https://www.youtube.com/watch?v=Fvh4djznuuM&t=1s)
     - [x] Apply Cache Docker Layer to reduce time build
   - [x] Github actions continuous deployment to ECS
 - [ ] Setup [Terraform](https://github.com/lytaitruong/nestjs-monolith-terraform)
