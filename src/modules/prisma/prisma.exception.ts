@@ -1,4 +1,4 @@
-import { IRes } from '@/common'
+import type { IRes } from '@/common'
 import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus } from '@nestjs/common'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
@@ -21,6 +21,6 @@ export class PrismaClientExceptionFilter implements ExceptionFilter {
       message: message.substring(message.indexOf('\n')).replace(/\n/g, '').trim(),
       time: new Date().toISOString(),
     }
-    return res.code(this.statusMapping[exception.code] || HttpStatus.INTERNAL_SERVER_ERROR).send(error)
+    return res.code(this.statusMapping.get(exception.code) || HttpStatus.INTERNAL_SERVER_ERROR).send(error)
   }
 }

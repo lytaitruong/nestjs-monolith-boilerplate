@@ -1,6 +1,6 @@
 import { ConfigurableModuleBuilder } from '@nestjs/common'
-import { FastifyRequest } from 'fastify'
-import { FastifyRequestType } from 'fastify/types/type-provider'
+import type { FastifyRequest } from 'fastify'
+import type { FastifyRequestType } from 'fastify/types/type-provider'
 import Stripe from 'stripe'
 
 export interface StripeModuleOptions {

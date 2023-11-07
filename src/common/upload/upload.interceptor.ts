@@ -1,4 +1,4 @@
-import { Multipart } from '@fastify/multipart'
+import type { Multipart } from '@fastify/multipart'
 import {
   BadRequestException,
   CallHandler,
@@ -7,7 +7,7 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common'
-import { FastifyRequest } from 'fastify'
+import type { FastifyRequest } from 'fastify'
 import { isArray } from 'lodash'
 import { Observable, map } from 'rxjs'
 

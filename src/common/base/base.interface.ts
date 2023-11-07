@@ -1,4 +1,4 @@
-import { Readable } from 'stream'
+import type { Readable } from 'stream'
 import { Pag, Res } from '../common.interface'
 
 export type Str<Result> = Pag<Result> | { name: string; data: Readable }

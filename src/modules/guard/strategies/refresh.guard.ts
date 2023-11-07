@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config'
 import { AuthGuard, PassportStrategy } from '@nestjs/passport'
 import { JsonWebTokenError, NotBeforeError, TokenExpiredError } from 'jsonwebtoken'
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt'
-import { Observable } from 'rxjs'
+import type { Observable } from 'rxjs'
 import { GUARD_ERROR } from '../guard.exception'
 import { GuardCookie, GuardType, JwtInfo } from '../guard.interface'
 

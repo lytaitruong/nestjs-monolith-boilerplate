@@ -1,4 +1,4 @@
-import { IAppError } from '@/common'
+import type { IAppError } from '@/common'
 import { HttpStatus } from '@nestjs/common'
 
 export type StripeCode = 'SIGNATURE_INVALID' | 'CREATE_CUSTOMER_FAILED' | 'CREATE_PAYMENT_FAILED'

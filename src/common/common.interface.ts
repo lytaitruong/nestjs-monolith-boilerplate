@@ -1,5 +1,5 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import { PaginatedResult } from 'prisma-pagination'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import type { PaginatedResult } from 'prisma-pagination'
 
 export type UUID = string
 export type GUID = string

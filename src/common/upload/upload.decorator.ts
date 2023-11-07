@@ -1,4 +1,4 @@
-import { MultipartFile } from '@fastify/multipart'
+import type { MultipartFile } from '@fastify/multipart'
 import { UseInterceptors, applyDecorators } from '@nestjs/common'
 import { ApiConsumes, ApiProperty, ApiPropertyOptions } from '@nestjs/swagger'
 import {

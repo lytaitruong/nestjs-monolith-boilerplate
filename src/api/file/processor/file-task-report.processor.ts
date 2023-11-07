@@ -1,6 +1,6 @@
 import { PrismaService } from '@/modules/prisma'
 import { Processor, WorkerHost } from '@nestjs/bullmq'
-import { Job } from 'bullmq'
+import type { Job } from 'bullmq'
 import { FILE_CSV_TASK_REPORT, IFileTaskReport, TaskReportJob } from '../file.interface'
 
 @Processor(FILE_CSV_TASK_REPORT, { concurrency: 1, limiter: { max: 20, duration: 30000 } })

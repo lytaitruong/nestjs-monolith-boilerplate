@@ -1,4 +1,4 @@
-import { IAppError } from '@/common'
+import type { IAppError } from '@/common'
 import { HttpStatus } from '@nestjs/common'
 
 export type S3Code = 'UPLOAD_FAILED' | 'REMOVE_FAILED' | 'DOWNLOAD_FAILED'

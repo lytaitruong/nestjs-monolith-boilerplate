@@ -1,9 +1,9 @@
 import { AppException } from '@/common'
 import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Observable } from 'rxjs'
+import type { Observable } from 'rxjs'
 import { STRIPE_ERROR } from './stripe.exception'
-import { IReqStripe } from './stripe.interface'
+import type { IReqStripe } from './stripe.interface'
 import { StripeService } from './stripe.service'
 
 @Injectable()

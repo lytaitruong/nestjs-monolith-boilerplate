@@ -1,6 +1,6 @@
 import { MimetypeImage } from '@/common'
 import { S3Service } from '@/modules/s3'
-import { CompleteMultipartUploadCommandOutput } from '@aws-sdk/client-s3'
+import type { CompleteMultipartUploadCommandOutput } from '@aws-sdk/client-s3'
 import { ConfigService } from '@nestjs/config'
 import { Job } from 'bullmq'
 import * as sharp from 'sharp'

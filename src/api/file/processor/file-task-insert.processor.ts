@@ -1,6 +1,6 @@
 import { PrismaService } from '@/modules/prisma'
 import { InjectQueue, OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq'
-import { Job, Queue } from 'bullmq'
+import type { Job, Queue } from 'bullmq'
 import {
   FILE_CSV_TASK_INSERT,
   FILE_CSV_TASK_REPORT,

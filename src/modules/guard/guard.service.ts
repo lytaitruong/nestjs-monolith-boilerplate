@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { randomUUID } from 'crypto'
-import { JwtInfo } from './guard.interface'
+import type { JwtInfo } from './guard.interface'
 
 @Injectable()
 export class GuardService {

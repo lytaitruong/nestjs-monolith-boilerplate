@@ -1,6 +1,6 @@
-import { INestApplication } from '@nestjs/common'
+import type { INestApplication } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
-import { FastifyRequest, HookHandlerDoneFunction, RawReplyDefaultExpression } from 'fastify'
+import type { FastifyRequest, HookHandlerDoneFunction, RawReplyDefaultExpression } from 'fastify'
 
 export interface ISwaggerSecurity {
   enable: boolean

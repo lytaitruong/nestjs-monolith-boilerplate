@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IPaginationMeta, IPaginationRes } from './pagination.interface'
+import type { IPaginationMeta, IPaginationRes } from './pagination.interface'
 
 export class PaginateMetaDto implements IPaginationMeta {
   @ApiProperty({ example: 10 })
