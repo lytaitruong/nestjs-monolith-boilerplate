@@ -1,5 +1,5 @@
 import type { Readable } from 'stream'
-import { Pag, Res } from '../common.interface'
+import type { Pag, Res } from '../common.interface'
 
 export type Str<Result> = Pag<Result> | { name: string; data: Readable }
 export interface IBaseService<Result, Create, Update, Params, Query, Info> {

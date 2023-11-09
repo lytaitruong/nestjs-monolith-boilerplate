@@ -1,7 +1,7 @@
-import { CUID, IReq } from '@/common'
-import { JwtPayload } from 'jsonwebtoken'
-import { IDevice } from 'ua-parser-js'
-import { GuardOauth2Res, GuardRefreshRes } from './guard.dto'
+import type { CUID, IReq } from '@/common'
+import type { JwtPayload } from 'jsonwebtoken'
+import type { IDevice } from 'ua-parser-js'
+import type { GuardOauth2Res, GuardRefreshRes } from './guard.dto'
 
 export enum GuardProvider {
   GOOGLE = 'google',

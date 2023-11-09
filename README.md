@@ -81,8 +81,9 @@
     - [x] Apply buildx arm64 to make compatibility with [AWS Graviton2](https://www.youtube.com/watch?v=Fvh4djznuuM&t=1s)
     - [x] Apply Cache Docker Layer to reduce time build
   - [x] Github actions continuous deployment to ECS
-- [ ] Setup [Terraform](https://github.com/lytaitruong/nestjs-monolith-terraform)
-- [ ] Build documentation for everyone can fork
+- [x] Setup [Terraform](https://github.com/lytaitruong/nestjs-monolith-terraform) to record state of infrastructure AWS Cloud
+- [x] Build documentation for everyone can fork
+- [ ] Setup Unit-Test coverage 80%
 - [ ] Setup Loki + Promtail to logs
 - [ ] Setup Prometheus for metrics
 - [ ] Setup Grafana for monitoring

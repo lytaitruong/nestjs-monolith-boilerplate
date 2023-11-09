@@ -1,4 +1,4 @@
-import { IResStripe, StripeData } from '@/modules/stripe/stripe.interface'
+import type { IResStripe, StripeData } from '@/modules/stripe/stripe.interface'
 
 export type WebhookTyp = {
   Stripe: StripeData
