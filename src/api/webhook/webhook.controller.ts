@@ -1,5 +1,5 @@
 import { Route } from '@/app.constant'
-import { StripeController } from '@/modules/stripe/stripe.controller'
+import { StripeController } from '@/modules/stripe'
 import { Controller } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { Mixin } from 'ts-mixer'

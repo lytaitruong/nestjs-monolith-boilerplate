@@ -1,5 +1,5 @@
 import { PrismaService } from '@/modules/prisma'
-import { StripeWebhook } from '@/modules/stripe/stripe.webhook'
+import { StripeWebhook } from '@/modules/stripe'
 import { Injectable } from '@nestjs/common'
 import { IWebhookService, WebhookRes, WebhookTyp } from './webhook.interface'
 
