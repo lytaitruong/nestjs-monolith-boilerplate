@@ -18,7 +18,7 @@ describe(`PrismaService`, () => {
         jest.resetModules()
         jest.spyOn(PrismaClient.prototype, '$connect').mockImplementation(() => Promise.resolve())
         const module: TestingModule = await Test.createTestingModule({
-          imports: [ConfigModule.forRoot({ isGlobal: true, load: [() => ({ env })] })],
+          imports: [ConfigModule.forRoot({ cache: false, load: [() => ({ env })] })],
           providers: [PrismaService],
         })
           .useMocker(createMock)

@@ -34,7 +34,7 @@ export class S3Service {
     return this.config.get('s3.bucketPublic.name')
   }
   get bucketSecret(): string {
-    return this.config.get('s3.bucketPublic.name')
+    return this.config.get('s3.bucketSecret.name')
   }
 
   @CatchErr(S3_ERROR.UPLOAD_FAILED)
