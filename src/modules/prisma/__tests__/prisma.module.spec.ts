@@ -4,6 +4,13 @@ import { PrismaModule } from '../prisma.module'
 import { PrismaService } from '../prisma.service'
 
 describe(`PrismaModule`, () => {
+  beforeEach(() => {
+    jest.resetModules()
+  })
+  afterEach(() => {
+    jest.resetAllMocks()
+    jest.clearAllMocks()
+  })
   it(`Should compile the module`, async () => {
     const module = await Test.createTestingModule({
       imports: [PrismaModule],

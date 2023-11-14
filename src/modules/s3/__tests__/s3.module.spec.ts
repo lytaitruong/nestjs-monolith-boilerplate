@@ -1,5 +1,5 @@
 import { createMock } from '@golevelup/ts-jest'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import { IConfigS3 } from '../s3.interface'
 import { S3Module } from '../s3.module'
@@ -8,9 +8,16 @@ import { S3Service } from '../s3.service'
 describe(`S3Module`, () => {
   let config: ConfigService
 
+  beforeEach(() => {
+    jest.resetModules()
+  })
+  afterEach(() => {
+    jest.resetAllMocks()
+    jest.clearAllMocks()
+  })
   it(`should be defined`, async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot({ cache: false, envFilePath: ['.env'] }), S3Module],
+      imports: [S3Module],
       providers: [ConfigService],
     })
       .useMocker(createMock)

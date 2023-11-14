@@ -18,7 +18,10 @@ describe(`PrismaException`, () => {
 
     filter = module.get(PrismaClientExceptionFilter)
   })
-  afterAll(async () => {
+  beforeEach(() => {
+    jest.resetModules()
+  })
+  afterEach(() => {
     jest.resetAllMocks()
     jest.clearAllMocks()
   })
@@ -27,7 +30,7 @@ describe(`PrismaException`, () => {
     expect(filter).toBeDefined()
   })
 
-  describe.each<[HttpStatus, string, string]>([
+  it.each<[HttpStatus, string, string]>([
     [
       HttpStatus.BAD_REQUEST,
       `P2000`,
@@ -44,41 +47,35 @@ describe(`PrismaException`, () => {
       `P2003`,
       `The record searched for in the where condition (users.phone = '0123456789') does not exist`,
     ],
-  ])(`Catch %s if Prisma Error code is %s`, (status, errorCode, message) => {
-    afterEach(() => {
-      jest.resetAllMocks()
-      jest.clearAllMocks()
+  ])(`Catch %s if Prisma Error code is %s`, async (status, errorCode, message) => {
+    const error = new PrismaClientKnownRequestError(message, { clientVersion: '5.x', code: errorCode })
+    const hostArgument = createMock<ArgumentsHost>()
+    const code = jest.fn().mockReturnThis()
+    const send = jest.fn().mockReturnThis()
+    hostArgument.switchToHttp.mockImplementationOnce(() => {
+      return {
+        getNext: jest.fn().mockReturnThis(),
+        getRequest: jest.fn().mockReturnThis(),
+        getResponse: jest.fn().mockImplementationOnce(() => {
+          return {
+            code,
+            send,
+          }
+        }),
+      }
     })
-    it(`Show response error has been format to IAppError`, async () => {
-      const error = new PrismaClientKnownRequestError(message, { clientVersion: '5.x', code: errorCode })
-      const hostArgument = createMock<ArgumentsHost>()
-      const code = jest.fn().mockReturnThis()
-      const send = jest.fn().mockReturnThis()
-      hostArgument.switchToHttp.mockImplementationOnce(() => {
-        return {
-          getNext: jest.fn().mockReturnThis(),
-          getRequest: jest.fn().mockReturnThis(),
-          getResponse: jest.fn().mockImplementationOnce(() => {
-            return {
-              code,
-              send,
-            }
-          }),
-        }
-      })
-      await filter.catch(error, hostArgument)
-      expect(code).toHaveBeenCalled()
-      expect(code).toHaveBeenCalledTimes(1)
-      expect(code).toHaveBeenCalledWith(status)
+    await filter.catch(error, hostArgument)
+    expect(code).toHaveBeenCalled()
+    expect(code).toHaveBeenCalledTimes(1)
+    expect(code).toHaveBeenCalledWith(status)
 
-      expect(send).toHaveBeenCalled()
-      expect(send).toHaveBeenCalledTimes(1)
-      expect(send).toHaveBeenCalledWith({
-        type: 'REST',
-        code: error.code,
-        message,
-        time: expect.any(String),
-      })
+    expect(send).toHaveBeenCalled()
+    expect(send).toHaveBeenCalledTimes(1)
+    expect(send).toHaveBeenCalledWith({
+      type: 'REST',
+      code: error.code,
+      message,
+      time: expect.any(String),
     })
   })
 })

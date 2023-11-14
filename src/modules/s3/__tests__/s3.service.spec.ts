@@ -34,11 +34,10 @@ describe(`S3Service`, () => {
 
     service = module.get<S3Service>(S3Service)
   })
-
   beforeEach(() => {
     s3Mock.reset()
+    jest.resetModules()
   })
-
   afterEach(() => {
     jest.resetAllMocks()
     jest.clearAllMocks()

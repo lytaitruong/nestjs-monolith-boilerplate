@@ -40,36 +40,34 @@ describe(`StripeWebhook`, () => {
     expect(webhook['stripe']).toBeDefined()
   })
 
-  describe.each<[Stripe.WebhookEndpointCreateParams.EnabledEvent, boolean]>([
+  it.each<[Stripe.WebhookEndpointCreateParams.EnabledEvent, boolean]>([
     ['payment_intent.canceled', true],
     ['payment_intent.succeeded', true],
     ['payment_intent.partially_funded', false],
-  ])(`Webhook should parseEvent type %s`, (type, isExecute) => {
-    it(`Should be run`, async () => {
-      jest.spyOn(webhook['logger'], 'log').mockImplementation(() => ({}))
+  ])(`Webhook should parseEvent type %s`, async (type, isExecute) => {
+    jest.spyOn(webhook['logger'], 'log').mockImplementation(() => ({}))
 
-      const id = randomUUID()
-      const response = await webhook.parseEvent({
-        object: 'event',
-        livemode: false,
-        id,
-        type: type as any,
-        data: {} as any,
-        pending_webhooks: 0,
-        api_version: '2023-10-16',
-        created: Date.now(),
-        request: null,
-      })
-
-      // expect.assertions(2)
-      expect(response).toEqual({ id, type, time: expect.any(String) })
-      if (isExecute) {
-        expect(webhook['logger'].log).toHaveBeenCalled()
-        expect(webhook['logger'].log).toHaveBeenCalledTimes(1)
-      } else {
-        expect(webhook['logger'].log).not.toHaveBeenCalled()
-        expect(webhook['logger'].log).toHaveBeenCalledTimes(0)
-      }
+    const id = randomUUID()
+    const response = await webhook.parseEvent({
+      object: 'event',
+      livemode: false,
+      id,
+      type: type as any,
+      data: {} as any,
+      pending_webhooks: 0,
+      api_version: '2023-10-16',
+      created: Date.now(),
+      request: null,
     })
+
+    expect.assertions(3)
+    expect(response).toEqual({ id, type, time: expect.any(String) })
+    if (isExecute) {
+      expect(webhook['logger'].log).toHaveBeenCalled()
+      expect(webhook['logger'].log).toHaveBeenCalledTimes(1)
+    } else {
+      expect(webhook['logger'].log).not.toHaveBeenCalled()
+      expect(webhook['logger'].log).toHaveBeenCalledTimes(0)
+    }
   })
 })

@@ -24,6 +24,13 @@ describe(`StripeController`, () => {
 
     controller = module.get(StripeController)
   })
+  beforeEach(() => {
+    jest.resetModules()
+  })
+  afterEach(() => {
+    jest.resetAllMocks()
+    jest.clearAllMocks()
+  })
 
   it(`should be defined`, () => {
     expect(controller).toBeDefined()

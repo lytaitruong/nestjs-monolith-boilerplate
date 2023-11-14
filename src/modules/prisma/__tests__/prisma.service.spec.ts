@@ -30,11 +30,6 @@ describe(`PrismaService`, () => {
         app.init()
       })
 
-      afterEach(() => {
-        jest.resetAllMocks()
-        jest.clearAllMocks()
-      })
-
       it(`should be defined`, () => {
         expect(config).toBeDefined()
         expect(service).toBeDefined()
