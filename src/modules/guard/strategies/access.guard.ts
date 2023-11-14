@@ -40,7 +40,6 @@ export class JwtAccessGuard extends AuthGuard(GuardType.ACCESS) {
     if (info instanceof TokenExpiredError) throw new AppException(GUARD_ERROR.ACCESS_TOKEN_EXPIRED)
     if (info instanceof JsonWebTokenError) throw new AppException(GUARD_ERROR.ACCESS_TOKEN_INVALID)
     if (err || !user || !user.sub) throw new AppException(GUARD_ERROR.ACCESS_TOKEN_REQUIRE)
-
     return user as TUser
   }
 }

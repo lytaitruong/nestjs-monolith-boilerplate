@@ -31,6 +31,7 @@ export const configGuard = (): IConfigGuard => ({
     scope: process.env.GITHUB_SCOPE ? process.env.GITHUB_SCOPE.split(',') : [],
   },
 })
+
 @Module({
   imports: [
     ConfigModule.forFeature(registerAs('guard', configGuard)),
