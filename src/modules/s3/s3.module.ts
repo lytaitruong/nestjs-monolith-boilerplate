@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, registerAs } from '@nestjs/config'
-import { S3Service } from '.'
 import { IConfigS3 } from './s3.interface'
+import { S3Service } from './s3.service'
 
 export const configS3 = (): IConfigS3 => ({
   region: process.env.AWS_REGION,

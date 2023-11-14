@@ -5,7 +5,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { PrismaClientExceptionFilter } from '../prisma.exception'
 import { PrismaModule } from '../prisma.module'
 
-describe('PrismaException', () => {
+describe(`PrismaException`, () => {
   let filter: PrismaClientExceptionFilter
 
   beforeAll(async () => {

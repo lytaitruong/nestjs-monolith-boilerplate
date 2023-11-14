@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config'
 import type { Observable } from 'rxjs'
 import { STRIPE_ERROR } from './stripe.exception'
 import type { IReqStripe } from './stripe.interface'
-import { StripeService } from './stripe.service'
+import { StripeWebhook } from './stripe.webhook'
 
 @Injectable()
 export class StripeGuard implements CanActivate {
@@ -13,7 +13,7 @@ export class StripeGuard implements CanActivate {
 
   constructor(
     private readonly config: ConfigService,
-    private readonly stripe: StripeService,
+    private readonly stripe: StripeWebhook,
   ) {
     this.WEBHOOK_KEY = this.config.get<string>('stripe.webhookKey')
   }
