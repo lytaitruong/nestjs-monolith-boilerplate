@@ -20,7 +20,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, GuardProvider.GIT
   }
 
   async validate(accessToken: string, refreshToken: string, profile: Profile, done: (err: Error, data?) => void) {
-    if (!profile) done(new AppException(GUARD_ERROR.GITHUB_OAUTH_INVALID))
+    if (!profile) return done(new AppException(GUARD_ERROR.GITHUB_OAUTH_INVALID))
 
     const info: Oauth2Info = {
       name:

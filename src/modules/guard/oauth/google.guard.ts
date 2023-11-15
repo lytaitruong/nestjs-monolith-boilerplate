@@ -20,13 +20,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy, GuardProvider.GOO
   }
 
   async validate(accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) {
-    if (!profile) done(new AppException(GUARD_ERROR.GOOGLE_OAUTH_INVALID))
+    if (!profile) return done(new AppException(GUARD_ERROR.GOOGLE_OAUTH_INVALID))
 
     const info: Oauth2Info = {
       name:
         profile.displayName ||
         (profile.name ? profile.name.givenName + ' ' + profile.name.familyName : profile.username),
-      email: profile.emails.filter((email) => email.verified)?.[0].value,
+      email: profile.emails.filter((email) => email.verified === 'true')?.[0].value,
       image: profile.photos?.[0].value,
       provider: GuardProvider.GOOGLE,
       oauth2: {
