@@ -1,5 +1,6 @@
+import { getArgumentMock } from '@/__mocks__/context.mock'
 import { createMock } from '@golevelup/ts-jest'
-import { ArgumentsHost, HttpStatus } from '@nestjs/common'
+import { HttpStatus } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { PrismaClientExceptionFilter } from '../prisma.exception'
@@ -49,21 +50,10 @@ describe(`PrismaException`, () => {
     ],
   ])(`Catch %s if Prisma Error code is %s`, async (status, errorCode, message) => {
     const error = new PrismaClientKnownRequestError(message, { clientVersion: '5.x', code: errorCode })
-    const hostArgument = createMock<ArgumentsHost>()
     const code = jest.fn().mockReturnThis()
     const send = jest.fn().mockReturnThis()
-    hostArgument.switchToHttp.mockImplementationOnce(() => {
-      return {
-        getNext: jest.fn().mockReturnThis(),
-        getRequest: jest.fn().mockReturnThis(),
-        getResponse: jest.fn().mockImplementationOnce(() => {
-          return {
-            code,
-            send,
-          }
-        }),
-      }
-    })
+    const hostArgument = getArgumentMock({}, { code, send })
+
     await filter.catch(error, hostArgument)
     expect(code).toHaveBeenCalled()
     expect(code).toHaveBeenCalledTimes(1)

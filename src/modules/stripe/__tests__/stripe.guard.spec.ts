@@ -1,6 +1,6 @@
+import { getContextMock } from '@/__mocks__/context.mock'
 import { AppException } from '@/common'
 import { createMock } from '@golevelup/ts-jest'
-import { ExecutionContext } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import { randomUUID } from 'crypto'
@@ -57,21 +57,9 @@ describe(`StripeGuard`, () => {
       jest.spyOn(guard['logger'], 'error').mockImplementation(() => ({}))
       jest.spyOn(guard['stripe'].webhook, 'constructEvent')
 
-      const context = createMock<ExecutionContext>()
       const code = jest.fn().mockReturnThis()
       const send = jest.fn().mockReturnThis()
-      context.switchToHttp.mockImplementationOnce(() => {
-        return {
-          getNext: jest.fn().mockReturnThis(),
-          getRequest: jest.fn().mockImplementation(() => ({ headers: {} })),
-          getResponse: jest.fn().mockImplementationOnce(() => {
-            return {
-              code,
-              send,
-            }
-          }),
-        }
-      })
+      const context = getContextMock({ headers: {} }, { code, send })
       expect.assertions(4)
       try {
         await guard.canActivate(context)
@@ -88,22 +76,9 @@ describe(`StripeGuard`, () => {
       jest.spyOn(guard['stripe'].webhook, 'constructEvent').mockImplementation(() => {
         throw new Error('Stripe Signature Invalid')
       })
-
-      const context = createMock<ExecutionContext>()
       const code = jest.fn().mockReturnThis()
       const send = jest.fn().mockReturnThis()
-      context.switchToHttp.mockImplementationOnce(() => {
-        return {
-          getNext: jest.fn().mockReturnThis(),
-          getRequest: jest.fn().mockImplementation(() => req),
-          getResponse: jest.fn().mockImplementationOnce(() => {
-            return {
-              code,
-              send,
-            }
-          }),
-        }
-      })
+      const context = getContextMock(req, { code, send })
       expect.assertions(6)
       try {
         await guard.canActivate(context)
@@ -135,21 +110,10 @@ describe(`StripeGuard`, () => {
         created: Date.now(),
       }))
 
-      const context = createMock<ExecutionContext>()
       const code = jest.fn().mockReturnThis()
       const send = jest.fn().mockReturnThis()
-      context.switchToHttp.mockImplementationOnce(() => {
-        return {
-          getNext: jest.fn().mockReturnThis(),
-          getRequest: jest.fn().mockImplementation(() => req),
-          getResponse: jest.fn().mockImplementationOnce(() => {
-            return {
-              code,
-              send,
-            }
-          }),
-        }
-      })
+      const context = getContextMock(req, { code, send })
+
       const response = await guard.canActivate(context)
 
       expect.assertions(7)

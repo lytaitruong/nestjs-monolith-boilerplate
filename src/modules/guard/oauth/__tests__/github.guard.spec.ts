@@ -1,7 +1,7 @@
+import { getContextMock } from '@/__mocks__/context.mock'
 import { AppException } from '@/common'
 import { createMock } from '@golevelup/ts-jest'
 import { CacheModule } from '@nestjs/cache-manager'
-import { ExecutionContext } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { PassportModule } from '@nestjs/passport'
 import { Test, TestingModule } from '@nestjs/testing'
@@ -51,20 +51,12 @@ describe(`GithubOauth2Guard`, () => {
   })
 
   it(`should encrypt jsonwebtoken and return payload info`, async () => {
-    const req = { query: {} }
-    const context = createMock<ExecutionContext>()
     const code = jest.fn().mockReturnThis()
     const send = jest.fn().mockReturnThis()
-    context.switchToHttp.mockImplementation(() => ({
-      getNext: jest.fn().mockReturnThis(),
-      getRequest: jest.fn().mockImplementation(() => req),
-      getResponse: jest.fn().mockImplementation(() => ({
-        code,
-        send,
-        setHeader: () => ({}),
-        end: () => ({}),
-      })),
-    }))
+    const setHeader = jest.fn().mockImplementation(() => ({}))
+    const end = jest.fn().mockImplementation(() => ({}))
+    const context = getContextMock({ query: {} }, { code, send, setHeader, end })
+
     jest.spyOn(passport, 'authenticate').mockImplementation((type, options, callback) => () => {
       callback(null, { profile: true })
     })

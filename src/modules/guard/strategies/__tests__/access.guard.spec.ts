@@ -1,6 +1,6 @@
+import { getContextMock } from '@/__mocks__/context.mock'
 import { AppException, IReq } from '@/common'
 import { createMock } from '@golevelup/ts-jest'
-import { ExecutionContext } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import { SignOptions, sign } from 'jsonwebtoken'
@@ -37,8 +37,6 @@ describe(`JwtAccessGuard`, () => {
 
   it(`should encrypt jsonwebtoken and return payload info`, async () => {
     const token = await sign(info, process.env.JWT_ACCESS_SECRET, { algorithm: 'RS256', expiresIn: '15m' })
-
-    const context = createMock<ExecutionContext>()
     const req: Pick<IReq, 'cookies' | 'headers' | 'user'> = {
       cookies: { [GuardCookie.ACCESS_TOKEN]: token },
       headers: { authorization: `Bearer ${token}` },
@@ -46,14 +44,7 @@ describe(`JwtAccessGuard`, () => {
     }
     const code = jest.fn().mockReturnThis()
     const send = jest.fn().mockReturnThis()
-    context.switchToHttp.mockImplementation(() => ({
-      getNext: jest.fn().mockReturnThis(),
-      getRequest: jest.fn().mockImplementation(() => req),
-      getResponse: jest.fn().mockImplementation(() => ({
-        code,
-        send,
-      })),
-    }))
+    const context = getContextMock(req, { code, send })
 
     const response = await guard.canActivate(context)
     expect(response).toEqual(true)
@@ -71,8 +62,6 @@ describe(`JwtAccessGuard`, () => {
       err === 'JsonWebTokenError' ? process.env.JWT_REFRESH_SECRET : process.env.JWT_ACCESS_SECRET,
       { algorithm: 'RS256', expiresIn: '15m', ...options },
     )
-
-    const context = createMock<ExecutionContext>()
     const req: Pick<IReq, 'cookies' | 'headers' | 'user'> = {
       cookies: { [GuardCookie.ACCESS_TOKEN]: token },
       headers: { authorization: `Bearer ${token}` },
@@ -80,14 +69,8 @@ describe(`JwtAccessGuard`, () => {
     }
     const code = jest.fn().mockReturnThis()
     const send = jest.fn().mockReturnThis()
-    context.switchToHttp.mockImplementation(() => ({
-      getNext: jest.fn().mockReturnThis(),
-      getRequest: jest.fn().mockImplementation(() => req),
-      getResponse: jest.fn().mockImplementation(() => ({
-        code,
-        send,
-      })),
-    }))
+    const context = getContextMock(req, { code, send })
+
     expect.assertions(3)
     try {
       await guard.canActivate(context)

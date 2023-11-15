@@ -1,6 +1,6 @@
+import { getContextMock } from '@/__mocks__/context.mock'
 import { AppException } from '@/common'
 import { createMock } from '@golevelup/ts-jest'
-import { ExecutionContext } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { GUARD_ERROR } from '../../guard.exception'
 import { GuardType } from '../../guard.interface'
@@ -47,17 +47,10 @@ describe(`RoleGuard`, () => {
     it(`should return true if context not define decorator Role`, async () => {
       jest.spyOn(guard['reflector'], 'getAllAndOverride').mockReturnValue(null)
 
-      const context = createMock<ExecutionContext>()
       const code = jest.fn().mockReturnThis()
       const send = jest.fn().mockReturnThis()
-      context.switchToHttp.mockImplementation(() => ({
-        getNext: jest.fn().mockReturnThis(),
-        getRequest: jest.fn().mockImplementation(() => ({})),
-        getResponse: jest.fn().mockImplementation(() => ({
-          code,
-          send,
-        })),
-      }))
+      const context = getContextMock({}, { code, send })
+
       const response = await guard.canActivate(context)
       expect(response).toEqual(true)
       expect(guard['reflector'].getAllAndOverride).toHaveBeenCalledTimes(1)
@@ -69,19 +62,10 @@ describe(`RoleGuard`, () => {
 
     it(`should return true if context has decorator Role match with jwt payload role`, async () => {
       jest.spyOn(guard['reflector'], 'getAllAndOverride').mockReturnValue(['user', 'admin'])
-      const context = createMock<ExecutionContext>()
+
       const code = jest.fn().mockReturnThis()
       const send = jest.fn().mockReturnThis()
-      context.switchToHttp.mockImplementation(() => ({
-        getNext: jest.fn().mockReturnThis(),
-        getRequest: jest.fn().mockImplementation(() => ({
-          user: { role: 'user' },
-        })),
-        getResponse: jest.fn().mockImplementation(() => ({
-          code,
-          send,
-        })),
-      }))
+      const context = getContextMock({ user: { role: 'user' } }, { code, send })
 
       const response = await guard.canActivate(context)
       expect(response).toEqual(true)
@@ -94,19 +78,11 @@ describe(`RoleGuard`, () => {
 
     it(`should throw FORBIDDEN_RESOURCE with code 403 when role not match with jwt payload role`, async () => {
       jest.spyOn(guard['reflector'], 'getAllAndOverride').mockReturnValue(['admin'])
-      const context = createMock<ExecutionContext>()
+
       const code = jest.fn().mockReturnThis()
       const send = jest.fn().mockReturnThis()
-      context.switchToHttp.mockImplementation(() => ({
-        getNext: jest.fn().mockReturnThis(),
-        getRequest: jest.fn().mockImplementation(() => ({
-          user: { role: 'user' },
-        })),
-        getResponse: jest.fn().mockImplementation(() => ({
-          code,
-          send,
-        })),
-      }))
+      const context = getContextMock({ user: { role: 'user' } }, { code, send })
+
       expect.assertions(4)
       try {
         await guard.canActivate(context)
