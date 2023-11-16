@@ -1,27 +1,4 @@
 {
-  "cSpell.words": [
-    "awslogs",
-    "awsvpc",
-    "Buildx",
-    "bullmq",
-    "bunx",
-    "commitlint",
-    "DDTHH",
-    "FARGATE",
-    "fieldname",
-    "golevelup",
-    "gstatic",
-    "jsdelivr",
-    "jwtid",
-    "livemode",
-    "MAXAGE",
-    "metatype",
-    "OIDC",
-    "paralleldrive",
-    "Parens",
-    "Promtail",
-    "ulimits"
-  ],
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },

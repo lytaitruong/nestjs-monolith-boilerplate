@@ -7,6 +7,7 @@ import { PassportModule } from '@nestjs/passport'
 import { Test, TestingModule } from '@nestjs/testing'
 import * as passport from 'passport'
 import { Profile } from 'passport-google-oauth20'
+import { getOauth2Info } from '../../__mocks__/guard.mock'
 import { GUARD_ERROR } from '../../guard.exception'
 import { GuardProvider } from '../../guard.interface'
 import { configGuard } from '../../guard.module'
@@ -68,13 +69,7 @@ describe(`GoogleOauth2Guard`, () => {
   describe(`validate`, () => {
     const accessToken = 'accessToken'
     const refreshToken = 'refreshToken'
-    const info = {
-      oauth2: { id: '1', accessToken, refreshToken },
-      provider: GuardProvider.GOOGLE,
-      name: 'michael jordan',
-      email: 'michael@gmail.com',
-      image: 'image.png',
-    }
+    const info = getOauth2Info(GuardProvider.GOOGLE, accessToken, refreshToken)
     it(`should throw error when profile is empty`, async () => {
       const profile = null
       const callback = jest.fn()

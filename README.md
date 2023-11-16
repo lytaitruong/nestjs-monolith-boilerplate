@@ -75,7 +75,7 @@
   - [x] Apply [Dynamic Module](https://docs.nestjs.com/fundamentals/dynamic-modules)
   - [x] Apply [DIP](https://trilon.io/blog/dependency-inversion-principle)
 - [x] Setup i18 localize
-- [ ] Github actions to ECS
+- [x] Github actions to ECS
   - [x] Github actions continuous integration to ECR
     - [x] Apply [OpenID Connect](https://openid.net/developers/how-connect-works/) instead of AWS SECRET KEY to [security](https://aws.amazon.com/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/)
     - [x] Apply buildx arm64 to make compatibility with [AWS Graviton2](https://www.youtube.com/watch?v=Fvh4djznuuM&t=1s)
@@ -83,7 +83,8 @@
   - [x] Github actions continuous deployment to ECS
 - [x] Setup [Terraform](https://github.com/lytaitruong/nestjs-monolith-terraform) to record state of infrastructure AWS Cloud
 - [x] Build documentation for everyone can fork
-- [ ] Setup Unit-Test coverage 80%
+- [x] Setup Unit-Test coverage 80%
+- [x] Setup SonarQube to quality code
 - [ ] Setup Loki + Promtail to logs
 - [ ] Setup Prometheus for metrics
 - [ ] Setup Grafana for monitoring
