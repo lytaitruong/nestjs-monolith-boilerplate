@@ -3,9 +3,9 @@ name: Build to ECR
 on:
   push:
     branches:
-    - development
-    - uat
-    - production
+      - development
+      - uat
+      - production
 
 env:
   ECR_REPOSITORY: nestjs-monolith-boilerplate
@@ -17,7 +17,7 @@ env:
 
 permissions:
   id-token: write # This is required for requesting the JWT
-  contents: read  # This is required for actions/checkout
+  contents: read # This is required for actions/checkout
 
 jobs:
   defined-metadata:
@@ -30,14 +30,23 @@ jobs:
       ecs-service: ${{ steps.defined-env.outputs.ecs-service }}
       ecs-cluster: ${{ steps.defined-env.outputs.ecs-cluster }}
     steps:
-    - name: Set Environment
-      id: defined-env
-      run: |
-        echo "repository-name=${{ env.ECR_REPOSITORY }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
-        echo "task-definition=${{ env.ECS_TASK_DEFINITION }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
-        echo "container=${{ env.ECS_CONTAINER }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
-        echo "ecs-service=${{ env.ECS_SERVICE }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
-        echo "ecs-cluster=${{ env.ECS_CLUSTER }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
+      - name: Set Environment
+        id: defined-env
+        run: |
+          echo "repository-name=${{ env.ECR_REPOSITORY }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
+          echo "task-definition=${{ env.ECS_TASK_DEFINITION }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
+          echo "container=${{ env.ECS_CONTAINER }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
+          echo "ecs-service=${{ env.ECS_SERVICE }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
+          echo "ecs-cluster=${{ env.ECS_CLUSTER }}-${{ env.ECR_ENVIRONMENT }}" >> "$GITHUB_OUTPUT"
+
+  sonarqube-scanner:
+    if: ${{ github.head_ref || github.ref_name }} == 'uat'
+    needs: [defined-metadata]
+    name: Sonarqube scanner
+    uses: ./.github/workflows/call-sonarqube.yml
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
   build-image:
     needs: [defined-metadata]
