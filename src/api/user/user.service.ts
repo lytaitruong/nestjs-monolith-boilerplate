@@ -52,7 +52,7 @@ export class UserService {
         ...(data.phone ? { phone: data.phone } : {}),
         ...(data.image ? { image } : {}),
       },
-      select: { id: true, email: true, image: true, state: true, gender: true, createdAt: true },
+      select: { id: true, email: true, phone: true, image: true, state: true, gender: true, createdAt: true },
     })
     // My cloudfront has set prefix with Photo so we don't need add it right
     user.image = this.s3.getSignURL('bucketPublic', user.image, dayjs().endOf('day').toDate())
