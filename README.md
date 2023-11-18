@@ -83,7 +83,7 @@
   - [x] Github actions continuous deployment to ECS
 - [x] Setup [Terraform](https://github.com/lytaitruong/nestjs-monolith-terraform) to record state of infrastructure AWS Cloud
 - [x] Build documentation for everyone can fork
-- [x] Setup Unit-Test coverage 80%
+- [x] Setup Unit-Test coverage 80% (I'm too lazy to cover all test !!! ^\_^ ~ 50%)
 - [x] Setup SonarQube to quality code
 - [ ] Setup Loki + Promtail to logs
 - [ ] Setup Prometheus for metrics
