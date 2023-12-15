@@ -12,6 +12,7 @@ import { TaskModule } from './api/task/task.module'
 import { UserModule } from './api/user/user.module'
 import { WebhookModule } from './api/webhook/webhook.module'
 import { AppController } from './app.controller'
+import { MetricModule } from './modules/metric'
 import { PrismaModule } from './modules/prisma'
 
 @Module({
@@ -53,6 +54,7 @@ import { PrismaModule } from './modules/prisma'
       route: '/queues',
     }),
     CommonModule,
+    MetricModule,
     PrismaModule,
     AuthModule,
     UserModule,

@@ -10,6 +10,7 @@ services:
       - 3333:3333
     env_file: .env
     networks:
+      - nestjs-platform
       - nestjs-postgres
       - nestjs-cache
     depends_on:
@@ -64,12 +65,41 @@ services:
     depends_on:
       - redis
 
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./scripts/prometheus.yaml:/etc/prometheus/prometheus.yaml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+    ports:
+      - '9090:9090'
+    networks:
+      - nestjs-platform
+      - nestjs-monitoring
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - nestjs-monitoring
+    depends_on:
+      - prometheus
+
 volumes:
   redis:
   postgres_db:
+  grafana-data:
 
 networks:
+  nestjs-platform:
+    driver: bridge
   nestjs-postgres:
     driver: bridge
   nestjs-cache:
+    driver: bridge
+  nestjs-monitoring:
     driver: bridge

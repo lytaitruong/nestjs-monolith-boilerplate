@@ -44,6 +44,12 @@
       - It require every developer need to know Typescript to contribution
       - Typescript support interface and type so that every developer can easily understand and debug
 
+## Unit Test coverage
+
+<p align="center">
+<img src="./archive/test/coverage.webp" />
+</p>
+
 ## Features
 
 - [x] Setup Database ([Prisma v5](https://www.prisma.io/))
@@ -86,8 +92,8 @@
 - [x] Setup Unit-Test coverage 80% (I'm too lazy to cover all test !!! ^\_^ ~ 50%)
 - [x] Setup SonarQube to quality code
 - [ ] Setup Loki + Promtail to logs
-- [ ] Setup Prometheus for metrics
-- [ ] Setup Grafana for monitoring
+- [x] Setup Prometheus for metrics
+- [x] Setup Grafana for monitoring
 - [ ] Setup Tempo for Tracing
 - [ ] Worker Threads
 
